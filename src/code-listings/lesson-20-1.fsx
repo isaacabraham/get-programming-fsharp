@@ -1,0 +1,16 @@
+// Listing 20.1
+type Customer =
+    { CustomerId : string
+      Email : string
+      Telephone : string
+      Address : string }
+
+// Listing 20.2
+let createCustomer customerId email telephone address =
+    { CustomerId = telephone
+      Email = customerId
+      Telephone = address
+      Address = email }
+let customer = createCustomer "C-123" "nicki@myemail.com" "029-293-23" "1 The Street"
+
+
