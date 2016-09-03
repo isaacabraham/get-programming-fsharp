@@ -45,3 +45,16 @@ let descriptionTwo =
 
 let shorthand = customer.SafetyScore |> Option.map describe
 let optionalDescribe = Option.map describe
+
+// Listing 19.8
+let test1 = Some 5 |> Option.filter(fun x -> x > 5)
+let test2 = Some 5 |> Option.filter(fun x -> x = 5)
+
+// Now you try #2
+let tryLoadCustomer id =
+    if id >= 2 && id <= 7 then Some(sprintf "Customer %d" id)
+    else None
+
+[ 1 .. 10 ]
+|> List.choose tryLoadCustomer
+

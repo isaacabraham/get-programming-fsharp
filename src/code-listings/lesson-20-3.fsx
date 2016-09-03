@@ -35,3 +35,27 @@ sendWelcomeEmail customer // does not compile
 customer
 |> validateCustomer
 |> Option.map sendWelcomeEmail
+
+
+// Listing 20.8
+let insertContactUnsafe contactDetails =
+  if contactDetails = (Email "nicki@myemail.com") then
+    { CustomerId = CustomerId "ABC"
+      PrimaryContactDetails = contactDetails
+      SecondaryContactDetails = None }
+  else failwith "Unable to insert  - customer already exists."
+
+type Result<'a> =
+| Success of 'a
+| Failure of string
+
+let insertContact contactDetails =
+  if contactDetails = (Email "nicki@myemail.com") then
+    Success { CustomerId = CustomerId "ABC"
+              PrimaryContactDetails = contactDetails
+              SecondaryContactDetails = None }
+  else Failure "Unable to insert  - customer already exists."
+
+match insertContact (Email "nicki@myemail.com") with
+| Success customer -> printfn "Saved with %A" customer.CustomerId
+| Failure error -> printfn "Unable to save: %s" error
