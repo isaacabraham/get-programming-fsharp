@@ -4,15 +4,15 @@
 // Or all in one line: #r @"CSharpProject\bin\debug\CSharpProject.dll"
 
 open CSharpProject
-
-let longhand =
-    [ "Tony"; "Fred"; "Samantha"; "Brad"; "Sophie "]
-    |> List.map(fun name -> Person(name)) #A
-
-
 let simon = Person "Simon"
 simon.PrintName()
 
+// Listing 21.4
+let people =
+    [ "Tony"; "Fred"; "Samantha"; "Brad"; "Sophie "]
+    |> List.map Person
+
+// Listing 21.5
 open System.Collections.Generic
 
 type PersonComparer() =
@@ -26,10 +26,9 @@ pComparer.Compare(simon, Person "Fred")
 // Object expressions
 let personComparer =
     { new IComparer<Person> with
-          member __.Compare(x, y) = x.Name.CompareTo(y) }
+          member __.Compare(x, y) = x.Name.CompareTo(y.Name) }
 
-personComparer.GetType().FullName
-
+personComparer.Compare(simon, Person "Tony")
 
 open System
 
