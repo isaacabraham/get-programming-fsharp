@@ -2,7 +2,7 @@ module OrderManagement
 
 open System.Collections.Generic
 
-/// Public API
+// Listing 24.1
 type OrderItemRequest = { ItemId : int; Count : int }
 type OrderRequest =
     { OrderId : int
@@ -14,6 +14,7 @@ type OrderRequest =
       Items : IEnumerable<OrderItemRequest> } // mandatory
 
 module private OrderProcessing =
+    // Listing 24.2
     type OrderId = OrderId of int
     type ItemId = ItemId of int
     type OrderItem = { ItemId : ItemId; Count : int }
@@ -24,6 +25,7 @@ module private OrderProcessing =
           ContactPreference : UpdatePreference option
           Comment : string option
           Items : OrderItem list }
+    // Listing 24.3
     let toOrder (orderRequest:OrderRequest) =
         { OrderId = OrderId orderRequest.OrderId
           CustomerName = match orderRequest.CustomerName with | null -> failwith "Customer name must be populated" | name -> name
