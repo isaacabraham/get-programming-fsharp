@@ -3,3 +3,5 @@ framework net452
 
 nuget FSharp.Data
 nuget XPlot.GoogleCharts
+nuget FSharp.Data.SqlClient
+nuget SqlProvider
