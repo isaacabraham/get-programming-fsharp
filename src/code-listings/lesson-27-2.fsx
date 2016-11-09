@@ -29,3 +29,10 @@ let category = context.SalesLt.ProductCategory.Create()
 category.ParentProductCategoryId <- Some 3
 category.Name <- "Scarf"
 context.SubmitUpdates()
+
+// Listing 27.6
+let mittens =
+    context.SalesLt.ProductCategory
+                   .Individuals
+                   .``As Name``
+                   .
