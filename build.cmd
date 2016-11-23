@@ -1,2 +1,2 @@
-.\paket\paket.bootstrapper.exe
-.\paket\paket.exe restore
+.paket\paket.bootstrapper.exe
+.paket\paket.exe restore
