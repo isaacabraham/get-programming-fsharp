@@ -11,5 +11,3 @@ let main _ =
     |> Seq.iter (fun c -> printfn "%A: %s %s" c.CompanyName c.FirstName c.LastName)
     
     0
-
-//    let liveConnection = System.Configuration.ConfigurationManager.ConnectionStrings.["AdventureWorks"].ConnectionString
