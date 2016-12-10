@@ -19,7 +19,10 @@ form.Text <- "Hello from F#!"
 
 // Listing 6.5
 open System.Windows.Forms
-let form = new Form(Text = "Hello from F#!", Width = 300, Height = 300)
+let form = new Form()
+form.Text <- "Hello from F#!"
+form.Width <- 300
+form.Height <- 300
 form.Show()
 
 // Listing 6.6

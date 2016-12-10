@@ -9,7 +9,7 @@ type Customer =
       PrimaryContactDetails : ContactDetails
       SecondaryContactDetails : ContactDetails option }
 
-// Listing 20.5
+// Listing 23.5
 let createCustomer customerId contactDetails secondaryDetails =
     { CustomerId = customerId
       PrimaryContactDetails = contactDetails
@@ -17,7 +17,7 @@ let createCustomer customerId contactDetails secondaryDetails =
 
 let customer = createCustomer (CustomerId "C-123") (Email "nicki@myemail.com") None
 
-// Listing 20.6
+// Listing 23.6
 type GenuineCustomer = GenuineCustomer of Customer
 
 let validateCustomer customer =
@@ -37,7 +37,7 @@ customer
 |> Option.map sendWelcomeEmail
 
 
-// Listing 20.8
+// Listing 23.8
 let insertContactUnsafe contactDetails =
   if contactDetails = (Email "nicki@myemail.com") then
     { CustomerId = CustomerId "ABC"

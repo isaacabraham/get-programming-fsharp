@@ -1,4 +1,4 @@
-// Listing 19.5
+// Listing 22.5
 let aNumber : int = 10
 let maybeANumber : int option = Some 10
 
@@ -30,7 +30,7 @@ let calculatePremiumForCustomer customer =
         printfn "No score supplied! Using temporary premium."
         300
 
-// Listing 19.7
+// Listing 22.7
 let customer = drivers.[0]
 let describe safetyScore = if safetyScore > 200 then "Safe" else "High Risk"
 
@@ -46,7 +46,7 @@ let descriptionTwo =
 let shorthand = customer.SafetyScore |> Option.map describe
 let optionalDescribe = Option.map describe
 
-// Listing 19.8
+// Listing 22.8
 let test1 = Some 5 |> Option.filter(fun x -> x > 5)
 let test2 = Some 5 |> Option.filter(fun x -> x = 5)
 

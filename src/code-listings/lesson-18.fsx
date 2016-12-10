@@ -1,85 +1,146 @@
 // Listing 18.1
-type SimpleDisk = { SizeGb : int }
-type Computer =
-    { Manufacturer : string
-      Disks: SimpleDisk list }
+type Aggregation<'T, 'U> = seq<'T> -> 'U
 
-let myPc =
-    { Manufacturer = "Computers Inc."
-      Disks =
-        [ { SizeGb = 100 }
-          { SizeGb = 250 }
-          { SizeGb = 500 } ] }
+type Sum = Aggregation<int, int>
+type Average = Aggregation<float, float>
+type Count<'T> = Aggregation<'T, int>
 
 // Listing 18.2
-type Disk =
-| HardDisk of RPM:int * Platters:int
-| SolidState
-| MMC of NumberOfPins:int
-
-// Listing 18.3
-let myHardDisk = HardDisk(RPM = 250, Platters = 7)
-let myHardDiskShort = HardDisk(250, 7)
-let args = 250, 7
-let myHardDiskTupled = HardDisk args
-let myMMC = MMC 5
-let mySsd = SolidState
-
-// Listing 18.4
-let seek disk =
-    match disk with
-    | HardDisk _ -> "Seeking loudly at a reasonable speed!"
-    | MMC _ -> "Seeking quietly but slowly"
-    | SolidState -> "Already found it!"
-
-seek mySsd
-
-// Listing 18.5
-let seekWithValues disk =
-    match disk with
-    | HardDisk(5400, 5) -> "Seeking very slowly!"
-    | HardDisk(rpm, 7) -> sprintf "I have 7 spindles and RPM %d!" rpm
-    | MMC 3 -> "Seeking. I have 3 pins!"
-
-seekWithValues (MMC 3)
+let sum inputs =
+    let mutable accumulator = 0
+    for input in inputs do
+        accumulator <- accumulator + input
+    accumulator
 
 // Now you try #1
-let describe disk =
-  match disk with
-  | SolidState -> "I'm a new-fangled SSD."
-  | MMC 1 -> "I've only got one pin."
-  | MMC pins when pins < 5 -> "I'm an MMC with a few pins."
-  | MMC pins -> sprintf "I'm an MMC with %d pins" pins
-  | HardDisk (5400, _) -> "I'm a slow hard disk"
-  | HardDisk (_, 7) -> "I have 7 spindles!"
-  | HardDisk _ -> "I'm a hard disk"
+let length inputs =
+    let mutable accumulator = 0
+    for input in inputs do
+        accumulator <- accumulator + 1
+    accumulator
+let lettersInTheAlphabet = [ 'a' .. 'z' ] |> length
+
+// Listing 18.3
+do
+    let sum inputs =
+        Seq.fold
+            (fun state input -> state + input)
+            0
+            inputs
+    ()
+
+// Listing 18.4
+do
+    let sum inputs =
+        Seq.fold
+            (fun state input ->
+                let newState = state + input
+                printfn "Current state is %d, input is %d, new state value is %d" state input newState
+                newState)
+            0
+            inputs
+
+    sum [ 1 .. 5 ]
+    ()
+
+// Now you try #2
+let lengthFold inputs =
+    Seq.fold
+        (fun state input -> state + 1)
+        0
+        inputs
+
+let foldAlphabet = [ 'a' .. 'z' ] |> lengthFold
+
+let maxFold inputs =
+    Seq.fold
+        (fun state input -> if input > state then input else state)
+        0
+        inputs
+let shouldBeTwenty = [ 1;2;5;3;20;13;18 ] |> maxFold
+
+// Listing 18.5
+let inputs = [ 1 .. 5 ]
+Seq.fold (fun state input -> state + input) 0 inputs
+inputs |> Seq.fold (fun state input -> state + input) 0
+(0, inputs) ||> Seq.fold (fun state input -> state + input)
 
 // Listing 18.6
-type MMCDisk = | RsMmc | MmcPlus | SecureMMC
-type DiskWithMmcData = | MMC of MMCDisk * NumberOfPins:int
-let disk = MMC(MmcPlus, 3)
-match disk with
-| MMC(MmcPlus, 3) -> "Seeking quietly but slowly"
-| MMC(SecureMMC, 6) -> "Seeking quietly with 6 pins."
+open System.IO
+let mutable totalChars = 0
+let sr = new StreamReader(File.OpenRead "book.txt")
+
+while (not sr.EndOfStream) do
+    let line = sr.ReadLine()
+    totalChars <- totalChars + line.ToCharArray().Length
 
 // Listing 18.7
-type DiskInfo =
-    { Manufacturer : string
-      SizeGb : int
-      DiskData : Disk }
-type FullComputer = { Manufacturer : string;  Disks : DiskInfo list }
-let myFullPc =
-    { Manufacturer = "Computers Inc."
-      Disks =
-        [ { Manufacturer = "HardDisks Inc."
-            SizeGb = 100
-            DiskData = HardDisk(5400, 7) }
-          { Manufacturer = "SuperDisks Corp."
-            SizeGb = 250
-            DiskData = SolidState } ] }
+let lines : string seq =
+    seq {
+        use sr = new StreamReader(File.OpenRead @"book.txt")
+        while (not sr.EndOfStream) do
+            yield sr.ReadLine() }
+
+(0, lines) ||> Seq.fold(fun total line -> total + line.Length)
 
 // Listing 18.8
-type Printer =
-| Injket = 0
-| Laserjet = 1
-| DotMatrix = 2
+open System
+type Rule = string -> bool * string 
+
+let rules : Rule list =
+    [ fun text -> (text.Split ' ').Length = 3, "Must be three words"
+      fun text -> text.Length <= 30, "Max length is 30 characters"
+      fun text -> text.ToCharArray()
+                  |> Array.filter Char.IsLetter
+                  |> Array.forall Char.IsUpper, "All letters must be caps" ]
+
+// Listing 18.9
+let validateManual (rules: Rule list) word =
+    let passed, error = rules.[0] word
+    if not passed then false, error
+    else
+        let passed, error = rules.[1] word
+        if not passed then false, error
+        else
+            let passed, error = rules.[2] word
+            if not passed then false, error
+            else true, ""
+
+// Listing 18.10
+let buildValidator (rules : Rule list) =
+    rules
+    |> List.reduce(fun firstRule secondRule word ->
+        let passed, error = firstRule word
+        if passed then
+            let passed, error = secondRule word
+            if passed then true, "" else false, error
+        else false, error)
+
+let validate = buildValidator rules
+let word = "HELLO FrOM F#"
+
+validate word
+ 
+// Now you try #3
+module Rules =
+    let threeWordRule (text:string) =
+        printfn "Running three word rule"
+        (text.Split ' ').Length = 3, "Must be three words"
+    let maxLengthRule (text:string) =
+        printfn "Running max length rule"
+        text.Length <= 30, "Max length is 30 characters"
+    let allCapsRule (text:string) =
+        printfn "Running all caps rule"
+        text.ToCharArray()
+        |> Array.filter Char.IsLetter
+        |> Array.forall Char.IsUpper, "All letters must be caps"
+    let noNumbersRule (text:string) =
+        printfn "Running no numbers rule"
+        text.ToCharArray()
+        |> Array.forall (Char.IsNumber >> not), "Numbers are not permitted"
+    
+    let allRules = [ threeWordRule; allCapsRule; maxLengthRule; noNumbersRule ]
+
+let debugValidate = buildValidator Rules.allRules
+let pass = debugValidate "HELLO FROM F#"
+let fail = debugValidate "HELLO FR0M F#"

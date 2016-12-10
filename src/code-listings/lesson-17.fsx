@@ -1,123 +1,79 @@
-System.Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
-    
-// Listing 17.1
-for number in 1 .. 10 do
-    printfn "%d Hello!" number
+// Listing 17.1-2
+open System.Collections.Generic
 
-for number in 10 .. -1 .. 1 do
-    printfn "%d Hello!" number
+do
+    let inventory = Dictionary<string, float>()
+    //let inventory = Dictionary<_,_>()
+    //let inventory = Dictionary()
 
-let customerIds = [ 45 .. 99 ]
-for customerId in customerIds do
-    printfn "%d bought something!" customerId
+    inventory.Add("Apples", 0.33)
+    inventory.Add("Oranges", 0.23)
+    inventory.Add("Bananas", 0.45)
 
-for even in 2 .. 2 .. 10 do
-    printfn "%d is an even number!" even
+    inventory.Remove "Oranges"
 
-// Listing 17.2
-open System.IO
-let reader = new StreamReader(File.OpenRead @"File.txt")
-while (not reader.EndOfStream) do
-    printfn "%s" (reader.ReadLine())
+    let bananas = inventory.["Bananas"]
+    let oranges = inventory.["Oranges"]
+    ()
 
-// Listing 17.3
+// Listing 15.3
+do
+    let inventory : IDictionary<string, float> = 
+        [ "Apples", 0.33; "Oranges", 0.23; "Bananas", 0.45 ]
+        |> dict
+
+    let bananas = inventory.["Bananas"]
+
+    inventory.Add("Pineapples", 0.85)
+    inventory.Remove("Bananas")
+    ()
+
+do
+    // Listing 15.4
+    let inventory = 
+        [ "Apples", 0.33; "Oranges", 0.23; "Bananas", 0.45 ]
+        |> Map.ofList
+
+    let apples = inventory.["Apples"]
+    let pineapples = inventory.["Pineapples"]
+
+    let newInventory =
+        inventory
+        |> Map.add "Pineapples" 0.87
+        |> Map.remove "Apples"
+
+    // Listing 15.5
+    let cheapFruit, expensiveFruit =
+        inventory
+        |> Map.partition(fun fruit cost -> cost > 0.3)
+
+    ()
+
+// Now you try
 open System
+open System.IO
 
-let arrayOfChars = [| for c in 'a' .. 'z' -> Char.ToUpper c |]
-let listOfSquares = [ for i in 1 .. 10 -> i * i ]
-let seqOfStrings = seq { for i in 2 .. 4 .. 20 -> sprintf "Number %d" i }
-seqOfStrings
+Directory.EnumerateDirectories(@"C:\")
+|> Seq.map DirectoryInfo
+|> Seq.map(fun di -> di.Name, di.CreationTimeUtc)
+|> Map.ofSeq
+|> Map.map(fun key value -> (DateTime.UtcNow - value).TotalDays)
 
-// Now you try #1
-for i in 1 .. 5 .. 1000 do printfn "%d" i
+// Listing 15.6
+let fruits = [ "Apples"; "Apples"; "Apples"; "Bananas"; "Pinapples" ]
+let fruitsSet = fruits |> Set
 
-let randoms =
-    let r = Random()
-    [ for i in 1 .. 10 -> r.Next(1, 100) ]
+// Listing 15.7
+let otherFruits = [ "Kiwi"; "Bananas"; "Grapes" ]
 
-let readTenLinesWhile =
-    use reader = new StreamReader(File.OpenRead @"lesson-16.fsx")
-    let mutable lineNumber = 1
-    while (not reader.EndOfStream && lineNumber <= 10) do
-        printfn "%d: %s" lineNumber (reader.ReadLine())
-        lineNumber <- (lineNumber + 1)
+let allFruitsList = (fruits @ otherFruits) |> List.distinct
 
-let readTenLinesSeq =
-    use reader = new StreamReader(File.OpenRead @"lesson-16.fsx")
-    let lines =
-        seq {
-            while not reader.EndOfStream do
-                yield reader.ReadLine() }
-    lines
-    |> Seq.truncate 10
-    |> Seq.iteri(fun lineNumber line -> printfn "%d: %s" (lineNumber + 1) line)
-    
-// Listing 17.4
-let getLimit (score, years) =
-    if score = "medium" && years = 1 then 500
-    elif score = "good" && (years = 0 || years = 1) then 750
-    elif score = "good" && years = 2 then 1000
-    elif score = "good" then 2000
-    else 250
+let otherFruitsSet = Set otherFruits
+let allFruitsSet = fruitsSet + otherFruitsSet
 
-let customer = "good", 1
-getLimit customer
+// Listing 15.8
+let allFruits = fruitsSet + otherFruitsSet
+let firstFruitsOnly = fruitsSet - otherFruitsSet
+let fruitsInBoth = fruitsSet |> Set.intersect otherFruitsSet
+let isSubset = fruitsSet |> Set.isSubset otherFruitsSet
 
-// Listing 17.5-6
-let getLimitPm customer =
-    match customer with
-    | "medium", 1 -> 500
-    | "good", 0 | "good", 1 -> 750
-    | "good", 2 -> 1000
-    | "good", _ -> 2000
-    | _ -> 250
-
-getLimitPm customer    
-
-// Listing 17.7
-let getCreditLimit customer =
-    match customer with
-    | "medium", 1 -> 500
-    | "good", years ->
-        match years with
-        | 0 | 1 -> 750
-        | 2 -> 1000
-        | _ -> 2000
-    | _ -> 250
-
-// Now you try #3
-type Customer = { Balance : int; Name : string }
-
-let handleCustomer customers =
-    match customers with
-    | [] -> failwith "No customers supplied!"
-    | [ customer ] -> printfn "Single customer, name is %s" customer.Name
-    | [ first; second ] -> printfn "Two customers, balance = %d" (first.Balance + second.Balance)
-    | customers -> printfn "Customers supplied: %d" customers.Length
-
-handleCustomer [] // throws exception
-handleCustomer [ { Balance = 10; Name = "Joe" } ] // prints name
-
-// Listing 17.9
-let getStatus customer =
-    match customer with
-    | { Balance = 0 } -> "Customer has empty balance!"
-    | { Name = "Isaac" } -> "This is a great customer!"
-    | { Name = name; Balance = 50 } -> sprintf "%s has a large balance!" name
-    | { Name = name } -> sprintf "%s is a normal customer" name
-
-{ Balance = 50; Name = "Joe" } |> getStatus
-
-// Listing 17.10
-let customers = [ { Balance = 10; Name = "Joe" } ]
-match customers with
-| [ { Name = "Tanya" }; { Balance = 25 }; _ ] -> "It's a match!"
-| _ -> "No match!"
-
-// Listing 17.11
-let customerTwo = { Balance = 150; Name = "Isaac" }
-if customerTwo.Name = "Isaac" then printfn "Hello!"
-
-match customerTwo.Name with
-| "Isaac" -> printfn "Hello!"
-| _ -> ()

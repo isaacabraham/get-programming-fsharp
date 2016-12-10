@@ -1,11 +1,11 @@
-// Listing 20.1
+// Listing 23.1
 type Customer =
     { CustomerId : string
       Email : string
       Telephone : string
       Address : string }
 
-// Listing 20.2
+// Listing 23.2
 let createCustomer customerId email telephone address =
     { CustomerId = telephone
       Email = customerId

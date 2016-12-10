@@ -1,4 +1,4 @@
-// Listing 27.3
+// Listing 32.3
 #r @"..\..\packages\SQLProvider\lib\FSharp.Data.SqlProvider.dll"
 open FSharp.Data.Sql
 
@@ -15,7 +15,7 @@ let customers =
     } |> Seq.toArray
 let customer = customers.[0]
 
-// Listing 27.4
+// Listing 32.4
 let names = 
     query {
         for customer in context.SalesLt.Customer do
@@ -24,13 +24,13 @@ let names =
         distinct
     } |> Seq.toArray
 
-// Listing 27.5
+// Listing 32.5
 let category = context.SalesLt.ProductCategory.Create()
 category.ParentProductCategoryId <- Some 3
 category.Name <- "Scarf"
 context.SubmitUpdates()
 
-// Listing 27.6
+// Listing 32.6
 let mittens =
     context.SalesLt.ProductCategory
                    .Individuals

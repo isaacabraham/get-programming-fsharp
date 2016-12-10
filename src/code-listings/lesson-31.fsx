@@ -1,4 +1,4 @@
-// Listing 26.1
+// Listing 31.1
 #I @"..\..\packages"
 #r @"FSharp.Data\lib\net40\FSharp.Data.dll"
 
@@ -30,7 +30,7 @@ let ef = Package.Load("https://www.nuget.org/packages/entityframework")
 let nunit = Package.Load("https://www.nuget.org/packages/nunit")
 let newtonsoft = Package.Load("https://www.nuget.org/packages/newtonsoft.json")
 
-// Listing 26.2
+// Listing 31.2
 [ ef; nunit; newtonsoft ]
 |> Seq.collect(fun package -> package.Tables.``Version History``.Rows)
 |> Seq.sortByDescending(fun versionHistory -> versionHistory.Downloads)

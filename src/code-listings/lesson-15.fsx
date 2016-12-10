@@ -1,79 +1,58 @@
-// Listing 15.1-2
+// Listing 15.1
+type FootballResult = { HomeTeam : string; AwayTeam : string; HomeGoals : int; AwayGoals : int }
+let create (ht, hg) (at, ag) = { HomeTeam = ht; AwayTeam = at; HomeGoals = hg; AwayGoals = ag }
+let results =
+    [ create ("Messiville", 1) ("Ronaldo City", 2)
+      create ("Messiville", 1) ("Bale Town", 3)
+      create ("Bale Town", 3) ("Ronaldo City", 1)
+      create ("Bale Town", 2) ("Messiville", 1)
+      create ("Ronaldo City", 4) ("Messiville", 2)
+      create ("Ronaldo City", 1) ("Bale Town", 2) ]
+
+// Listing 15.2
 open System.Collections.Generic
 
-do
-    let inventory = Dictionary<string, float>()
-    //let inventory = Dictionary<_,_>()
-    //let inventory = Dictionary()
+type TeamSummary = { Name : string; mutable AwayWins : int }
+let summary = ResizeArray()
 
-    inventory.Add("Apples", 0.33)
-    inventory.Add("Oranges", 0.23)
-    inventory.Add("Bananas", 0.45)
+for result in results do
+    if result.AwayGoals > result.HomeGoals then
+        let mutable found = false
+        for entry in summary do
+            if entry.Name = result.AwayTeam then
+                found <- true
+                entry.AwayWins <- entry.AwayWins + 1
+        if not found then
+            summary.Add { Name = result.AwayTeam; AwayWins = 1 }
+            
+let comparer =
+    { new IComparer<TeamSummary> with
+        member this.Compare(x,y) =
+            if x.AwayWins > y.AwayWins then -1
+            elif x.AwayWins < y.AwayWins then 1
+            else 0 }
 
-    inventory.Remove "Oranges"
+summary.Sort(comparer)
 
-    let bananas = inventory.["Bananas"]
-    let oranges = inventory.["Oranges"]
-    ()
+// Listing 15.4
+let isAwayWin result = result.AwayGoals > result.HomeGoals
 
-// Listing 15.3
-do
-    let inventory : IDictionary<string, float> = 
-        [ "Apples", 0.33; "Oranges", 0.23; "Bananas", 0.45 ]
-        |> dict
+results
+|> List.filter isAwayWin
+|> List.countBy(fun x -> x.AwayTeam)
+|> List.sortByDescending(fun (_, awayWins) -> awayWins)
 
-    let bananas = inventory.["Bananas"]
-
-    inventory.Add("Pineapples", 0.85)
-    inventory.Remove("Bananas")
-    ()
-
-do
-    // Listing 15.4
-    let inventory = 
-        [ "Apples", 0.33; "Oranges", 0.23; "Bananas", 0.45 ]
-        |> Map.ofList
-
-    let apples = inventory.["Apples"]
-    let pineapples = inventory.["Pineapples"]
-
-    let newInventory =
-        inventory
-        |> Map.add "Pineapples" 0.87
-        |> Map.remove "Apples"
-
-    // Listing 15.5
-    let cheapFruit, expensiveFruit =
-        inventory
-        |> Map.partition(fun fruit cost -> cost > 0.3)
-
-    ()
-
-// Now you try
-open System
-open System.IO
-
-Directory.EnumerateDirectories(@"C:\")
-|> Seq.map DirectoryInfo
-|> Seq.map(fun di -> di.Name, di.CreationTimeUtc)
-|> Map.ofSeq
-|> Map.map(fun key value -> (DateTime.UtcNow - value).TotalDays)
+// Listing 15.5
+let numbers = [| 1; 2; 3; 4; 6 |]
+let firstNumber = numbers.[0]
+let firstThreeNumbers = numbers.[0 .. 2]
+numbers.[0] <- 99
 
 // Listing 15.6
-let fruits = [ "Apples"; "Apples"; "Apples"; "Bananas"; "Pinapples" ]
-let fruitsSet = fruits |> Set
-
-// Listing 15.7
-let otherFruits = [ "Kiwi"; "Bananas"; "Grapes" ]
-
-let allFruitsList = (fruits @ otherFruits) |> List.distinct
-
-let otherFruitsSet = Set otherFruits
-let allFruitsSet = fruitsSet + otherFruitsSet
-
-// Listing 15.8
-let allFruits = fruitsSet + otherFruitsSet
-let firstFruitsOnly = fruitsSet - otherFruitsSet
-let fruitsInBoth = fruitsSet |> Set.intersect otherFruitsSet
-let isSubset = fruitsSet |> Set.isSubset otherFruitsSet
-
+do
+    let numbers = [ 1; 2; 3; 4; 5; 6 ]
+    let numbersQuick = [ 1 .. 6 ]
+    let head :: tail = numbers
+    let moreNumbers = 0 :: numbers
+    let evenMoreNumbers = moreNumbers @ [ 7 .. 9 ]
+    ()

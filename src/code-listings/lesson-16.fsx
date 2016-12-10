@@ -1,146 +1,44 @@
 // Listing 16.1
-type Aggregation<'T, 'U> = seq<'T> -> 'U
+let numbers = [ 1 .. 10 ]
+let timesTwo n = n * 2
 
-type Sum = Aggregation<int, int>
-type Average = Aggregation<float, float>
-type Count<'T> = Aggregation<'T, int>
+let outputImperative = ResizeArray()
+for number in numbers do
+    outputImperative.Add (number |> timesTwo)
+
+let outputFunctional = numbers |> List.map timesTwo
 
 // Listing 16.2
-let sum inputs =
-    let mutable accumulator = 0
-    for input in inputs do
-        accumulator <- accumulator + input
-    accumulator
-
-// Now you try #1
-let length inputs =
-    let mutable accumulator = 0
-    for input in inputs do
-        accumulator <- accumulator + 1
-    accumulator
-let lettersInTheAlphabet = [ 'a' .. 'z' ] |> length
+type Order = { OrderId : int }
+type Customer = { CustomerId : int; Orders : Order list; Town : string }
+let customers : Customer list = []
+let orders : Order list = customers |> List.collect(fun c -> c.Orders)
 
 // Listing 16.3
-do
-    let sum inputs =
-        Seq.fold
-            (fun state input -> state + input)
-            0
-            inputs
-    ()
+open System
+
+[ DateTime(2010,5,1); DateTime(2010,6,1); DateTime(2010,6,12); DateTime(2010,7,3) ]
+|> List.pairwise
+|> List.map(fun (a, b) -> b - a)
+|> List.map(fun time -> time.TotalDays)
 
 // Listing 16.4
-do
-    let sum inputs =
-        Seq.fold
-            (fun state input ->
-                let newState = state + input
-                printfn "Current state is %d, input is %d, new state value is %d" state input newState
-                newState)
-            0
-            inputs
-
-    sum [ 1 .. 5 ]
-    ()
-
-// Now you try #2
-let lengthFold inputs =
-    Seq.fold
-        (fun state input -> state + 1)
-        0
-        inputs
-
-let foldAlphabet = [ 'a' .. 'z' ] |> lengthFold
-
-let maxFold inputs =
-    Seq.fold
-        (fun state input -> if input > state then input else state)
-        0
-        inputs
-let shouldBeTwenty = [ 1;2;5;3;20;13;18 ] |> maxFold
+let londonCustomers, otherCustomers =
+    customers
+    |> List.partition(fun c -> c.Town = "London")
 
 // Listing 16.5
-let inputs = [ 1 .. 5 ]
-Seq.fold (fun state input -> state + input) 0 inputs
-inputs |> Seq.fold (fun state input -> state + input) 0
-(0, inputs) ||> Seq.fold (fun state input -> state + input)
+do
+    let numbers = [ 1.0 .. 10.0 ]
+    let total = numbers |> List.sum
+    let average = numbers |> List.average
+    let max = numbers |> List.max
+    let min = numbers |> List.min
+    ()
 
 // Listing 16.6
-open System.IO
-let mutable totalChars = 0
-let sr = new StreamReader(File.OpenRead "book.txt")
-
-while (not sr.EndOfStream) do
-    let line = sr.ReadLine()
-    totalChars <- totalChars + line.ToCharArray().Length
-
-// Listing 16.7
-let lines : string seq =
-    seq {
-        use sr = new StreamReader(File.OpenRead @"book.txt")
-        while (not sr.EndOfStream) do
-            yield sr.ReadLine() }
-
-(0, lines) ||> Seq.fold(fun total line -> total + line.Length)
-
-// Listing 16.8
-open System
-type Rule = string -> bool * string 
-
-let rules : Rule list =
-    [ fun text -> (text.Split ' ').Length = 3, "Must be three words"
-      fun text -> text.Length <= 30, "Max length is 30 characters"
-      fun text -> text.ToCharArray()
-                  |> Array.filter Char.IsLetter
-                  |> Array.forall Char.IsUpper, "All letters must be caps" ]
-
-// Listing 16.9
-let validateManual (rules: Rule list) word =
-    let passed, error = rules.[0] word
-    if not passed then false, error
-    else
-        let passed, error = rules.[1] word
-        if not passed then false, error
-        else
-            let passed, error = rules.[2] word
-            if not passed then false, error
-            else true, ""
-
-// Listing 16.10
-let buildValidator (rules : Rule list) =
-    rules
-    |> List.reduce(fun firstRule secondRule word ->
-        let passed, error = firstRule word
-        if passed then
-            let passed, error = secondRule word
-            if passed then true, "" else false, error
-        else false, error)
-
-let validate = buildValidator rules
-let word = "HELLO FrOM F#"
-
-validate word
- 
-// Now you try #3
-module Rules =
-    let threeWordRule (text:string) =
-        printfn "Running three word rule"
-        (text.Split ' ').Length = 3, "Must be three words"
-    let maxLengthRule (text:string) =
-        printfn "Running max length rule"
-        text.Length <= 30, "Max length is 30 characters"
-    let allCapsRule (text:string) =
-        printfn "Running all caps rule"
-        text.ToCharArray()
-        |> Array.filter Char.IsLetter
-        |> Array.forall Char.IsUpper, "All letters must be caps"
-    let noNumbersRule (text:string) =
-        printfn "Running no numbers rule"
-        text.ToCharArray()
-        |> Array.forall (Char.IsNumber >> not), "Numbers are not permitted"
-    
-    let allRules = [ threeWordRule; allCapsRule; maxLengthRule; noNumbersRule ]
-
-let debugValidate = buildValidator Rules.allRules
-let pass = debugValidate "HELLO FROM F#"
-let fail = debugValidate "HELLO FR0M F#"
+let numberOne =
+    [ 1 .. 5 ]
+    |> List.toArray
+    |> Seq.ofArray
+    |> Seq.head

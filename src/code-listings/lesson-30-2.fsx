@@ -1,4 +1,4 @@
-// Listing 25.1
+//  Listing 30.1
 #I @"..\..\packages"
 #r @"FSharp.Data\lib\net40\FSharp.Data.dll"
 
@@ -6,7 +6,7 @@ open FSharp.Data
 type Football = CsvProvider< @"..\..\data\FootballResults.csv">
 let data = Football.GetSample().Rows |> Seq.toArray
 
-// Listing 25.2
+//  Listing 30.2
 #r @"Google.DataTable.Net.Wrapper\lib\Google.DataTable.Net.Wrapper.dll"
 #r @"XPlot.GoogleCharts\lib\net45\XPlot.GoogleCharts.dll"
 open XPlot.GoogleCharts
