@@ -2,9 +2,9 @@
 #load "Operations.fs"
 #load "Auditing.fs"
 
-open Capstone1.Operations
-open Capstone1.Domain
-open Capstone1.Auditing
+open Capstone2.Operations
+open Capstone2.Domain
+open Capstone2.Auditing
 open System
 
 // Create console-auditing withdraw and deposit functions.

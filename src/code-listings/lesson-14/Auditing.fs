@@ -1,6 +1,6 @@
-module Capstone1.Auditing
+module Capstone2.Auditing
 
-open Capstone1.Domain
+open Capstone2.Domain
 open System.IO
 
 /// Logs to the console

@@ -1,8 +1,8 @@
-module Capstone1.Program
+module Capstone2.Program
 
 open System
-open Capstone1.Domain
-open Capstone1.Operations
+open Capstone2.Domain
+open Capstone2.Operations
 
 [<EntryPoint>]
 let main argv =
