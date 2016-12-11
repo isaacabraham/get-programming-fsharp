@@ -7,11 +7,18 @@ let where filter customers =
                 yield customer }
 
 let customers = [ { Age = 21 }; { Age = 35 }; { Age = 36 } ]
+
+let whereCustomersAreOver35 customers =
+    seq {
+        for customer in customers do
+            if customer.Age > 35 then
+                yield customer }
+
+
 let isOver35 customer = customer.Age > 35
 
 customers |> where isOver35
 customers |> where (fun customer -> customer.Age > 35)
-
 
 
 // Listing 13.6
