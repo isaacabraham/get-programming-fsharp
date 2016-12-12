@@ -60,19 +60,18 @@ Directory.EnumerateDirectories(@"C:\")
 
 // Listing 17.6
 let myBasket = [ "Apples"; "Apples"; "Apples"; "Bananas"; "Pinapples" ]
-let myBasketSet = myBasket |> Set.ofList
+let fruitsILike = myBasket |> Set.ofList
 
 // Listing 17.7
 let yourBasket = [ "Kiwi"; "Bananas"; "Grapes" ]
 
-let bothBaskets = (myBasket @ yourBasket) |> List.distinct
+let allFruitsList = (myBasket @ yourBasket) |> List.distinct
 
-let yourBasketSet = yourBasket |> Set.ofList
-let bothBasketsSet = myBasketSet + yourBasketSet
+let fruitsYouLike = yourBasket |> Set.ofList
+let allFruits = fruitsILike + fruitsYouLike
 
 // Listing 17.8
-let allFruits = myBasketSet + yourBasketSet
-let firstFruitsOnly = myBasketSet - yourBasketSet
-let fruitsInBoth = myBasketSet |> Set.intersect yourBasketSet
-let isSubset = myBasketSet |> Set.isSubset yourBasketSet
+let fruitsJustForMe = allFruits - fruitsYouLike
+let fruitsWeCanShare = fruitsILike |> Set.intersect fruitsYouLike
+let doILikeAllYourFruits = fruitsILike |> Set.isSubset fruitsYouLike
 
