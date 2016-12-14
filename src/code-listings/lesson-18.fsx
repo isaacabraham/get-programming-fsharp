@@ -1,9 +1,7 @@
 // Listing 18.1
-type Aggregation<'T, 'U> = seq<'T> -> 'U
-
-type Sum = Aggregation<int, int>
-type Average = Aggregation<float, float>
-type Count<'T> = Aggregation<'T, int>
+type Sum = int seq -> int
+type Average = float seq -> float 
+type Count<'T> = 'T seq -> int
 
 // Listing 18.2
 let sum inputs =
@@ -109,12 +107,13 @@ let validateManual (rules: Rule list) word =
 // Listing 18.10
 let buildValidator (rules : Rule list) =
     rules
-    |> List.reduce(fun firstRule secondRule word ->
-        let passed, error = firstRule word
-        if passed then
-            let passed, error = secondRule word
-            if passed then true, "" else false, error
-        else false, error)
+    |> List.reduce(fun firstRule secondRule ->
+        fun word ->
+            let passed, error = firstRule word
+            if passed then
+                let passed, error = secondRule word
+                if passed then true, "" else false, error
+            else false, error)
 
 let validate = buildValidator rules
 let word = "HELLO FrOM F#"
@@ -131,14 +130,14 @@ module Rules =
         text.Length <= 30, "Max length is 30 characters"
     let allCapsRule (text:string) =
         printfn "Running all caps rule"
-        text.ToCharArray()
-        |> Array.filter Char.IsLetter
-        |> Array.forall Char.IsUpper, "All letters must be caps"
+        text
+        |> Seq.filter Char.IsLetter
+        |> Seq.forall Char.IsUpper, "All letters must be caps"
     let noNumbersRule (text:string) =
         printfn "Running no numbers rule"
-        text.ToCharArray()
-        |> Array.forall (Char.IsNumber >> not), "Numbers are not permitted"
-    
+        text
+        |> Seq.forall (Char.IsNumber >> not), "Numbers are not permitted"
+
     let allRules = [ threeWordRule; allCapsRule; maxLengthRule; noNumbersRule ]
 
 let debugValidate = buildValidator Rules.allRules
