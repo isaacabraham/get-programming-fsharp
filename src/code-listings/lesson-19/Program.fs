@@ -7,10 +7,11 @@ open Capstone3.Operations
 [<EntryPoint>]
 let main _ =
     let account =
+        let loadAccountFromDisk = Auditing.findTransactionsOnDisk >> Auditing.loadAccount
         let name =
             Console.Write "Please enter your name: "
             Console.ReadLine()
-        Auditing.loadAccount name
+        loadAccountFromDisk name
     printfn "Current balance is £%M" account.Balance
 
     let withdrawWithAudit = auditAs "withdraw" Auditing.composedLogger withdraw

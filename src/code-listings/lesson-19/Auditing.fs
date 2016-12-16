@@ -1,12 +1,13 @@
 module Capstone3.Auditing
 
+open Capstone3.Operations
 open Capstone3.Domain
 open Newtonsoft.Json
 open System
 open System.IO
 
 /// Logs to the console
-let console accountId transaction =
+let console _ accountId transaction =
     printfn "Account %O: %s of %M (approved: %b)" accountId transaction.Operation transaction.Amount transaction.Accepted
 let accountsPath = @"C:\temp\learnfsharp\lesson19"
 let buildPath(owner, accountId:Guid) = sprintf @"%s\%s_%O" accountsPath owner accountId
@@ -29,29 +30,28 @@ let fileSystem accountId owner transaction =
 let composedLogger = 
     let loggers =
         [ fileSystem
-          fun accountId _ txn -> console accountId txn ]
+          console ]
     fun accountId owner transaction ->
         loggers
         |> List.iter(fun logger -> logger accountId owner transaction)
-
-let loadAccount owner =
+let findTransactionsOnDisk owner =
     let folder = findAccountFolder owner
-    if String.IsNullOrEmpty folder then
-        { AccountId = Guid.NewGuid(); Balance = 0M; Owner = { Name = owner } }
+    if String.IsNullOrEmpty folder then owner, Guid.Empty, Seq.empty
     else
+        let fileToTransaction filename =
+            let fileContents = filename |> File.ReadAllText
+            JsonConvert.DeserializeObject<Transaction> fileContents
         let owner, accountId =
             let parts = folder.Split '_'
             parts.[0], Guid.Parse parts.[1]
+        owner, accountId, buildPath(owner, accountId)
+                          |> Directory.EnumerateFiles
+                          |> Seq.map fileToTransaction
+let loadAccount (owner, accountId, transactions) =
+    let openingAccount = { AccountId = accountId; Balance = 0M; Owner = { Name = owner } }
 
-        buildPath(owner, accountId)
-        |> Directory.EnumerateFiles
-        |> Seq.map File.ReadAllText
-        |> Seq.map(fun fileContents -> JsonConvert.DeserializeObject<Transaction> fileContents)
-        |> Seq.filter(fun txn -> txn.Accepted)
-        |> Seq.sortBy(fun txn -> txn.Timestamp)
-        |> Seq.fold(fun account txn ->
-            { account with
-                Balance =
-                    if txn.Operation = "withdraw" then account.Balance - txn.Amount
-                    else account.Balance + txn.Amount })
-            { AccountId = accountId; Balance = 0M; Owner = { Name = owner } }
+    transactions
+    |> Seq.sortBy(fun txn -> txn.Timestamp)
+    |> Seq.fold(fun account txn ->
+        if txn.Operation = "withdraw" then account |> withdraw txn.Amount
+        else account |> deposit txn.Amount) openingAccount
