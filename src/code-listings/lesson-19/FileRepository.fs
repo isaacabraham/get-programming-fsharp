@@ -15,21 +15,10 @@ let private findAccountFolder owner =
         let folder = Seq.head folders
         DirectoryInfo(folder).Name
 let buildPath(owner, accountId:Guid) = sprintf @"%s\%s_%O" accountsPath owner accountId
-let findTransactionsOnDisk owner =
-    let folder = findAccountFolder owner
-    if String.IsNullOrEmpty folder then owner, Guid.NewGuid(), Seq.empty
-    else
-        let owner, accountId =
-            let parts = folder.Split '_'
-            parts.[0], Guid.Parse parts.[1]
-        owner, accountId, buildPath(owner, accountId)
-                          |> Directory.EnumerateFiles
-                          |> Seq.map (File.ReadAllText >> Transactions.deserialize)
 
 /// Logs to the file system
-let writeTransaction accountId owner transaction =
+let writeTransaction accountId owner message =
     let path = buildPath(owner, accountId)    
     path |> Directory.CreateDirectory |> ignore
-    let filePath = sprintf "%s/%d.txt" path (transaction.Timestamp.ToFileTimeUtc())
-    let line = sprintf "%O***%s***%M***%b" transaction.Timestamp transaction.Operation transaction.Amount transaction.Accepted
-    File.WriteAllText(filePath, line)
+    let filePath = sprintf "%s/%d.txt" path (DateTime.UtcNow.ToFileTimeUtc())
+    File.WriteAllText(filePath, message)
