@@ -1,4 +1,3 @@
-#r @"packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll"
 #load "Domain.fs"
 #load "Operations.fs"
 #load "Auditing.fs"

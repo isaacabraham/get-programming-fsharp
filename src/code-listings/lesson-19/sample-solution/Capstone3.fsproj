@@ -61,7 +61,7 @@
     <Compile Include="Auditing.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
-    <None Include="Capstone3.fsx" />
+    <None Include="Scratchpad.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

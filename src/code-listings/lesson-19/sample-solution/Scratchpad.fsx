@@ -1,12 +1,34 @@
-#r @"packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll"
 #load "Domain.fs"
 #load "Operations.fs"
-#load "Auditing.fs"
 
 open Capstone3.Operations
 open Capstone3.Domain
-open Capstone3.Auditing
 open System
+
+// Listing 19.2 (Listing 19.1 is below!)
+let isValidCommand = (Set [ 'w';'d';'x']).Contains
+let isStopCommand = (=) 'x'
+let getAmount command =
+  if command = 'd' then 'd', 50M
+  elif command = 'w' then 'w', 25M
+  else command, 0M
+let processCommand account (command, amount) =
+  if command = 'd' then account |> deposit amount
+  else account |> withdraw amount
+
+// Listing 19.1
+let openingAccount = { Owner = { Name = "Isaac" }; Balance = 0M; AccountId = Guid.Empty } 
+let account =
+    [ 'd'; 'w'; 'z'; 'f'; 'd'; 'x'; 'w' ]
+    |> Seq.filter isValidCommand
+    |> Seq.takeWhile (not << isStopCommand)
+    |> Seq.map getAmount
+    |> Seq.fold processCommand openingAccount
+
+
+#load "Auditing.fs"
+
+open Capstone3.Auditing
 
 // Test out create account from transaction history
 let transactions =
@@ -19,4 +41,4 @@ transactions = (transactions |> List.map (Transactions.serialize >> Transactions
 
 let accountId = Guid.Empty
 let owner = "Isaac"
-let account = loadAccount(owner, accountId, transactions)
+let loadedAccount = loadAccount(owner, accountId, transactions)
