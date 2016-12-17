@@ -18,7 +18,8 @@ module UserInput =
     let commands = seq {
         while true do
             Console.Write "(d)eposit, (w)ithdraw or e(x)it: "
-            yield Console.ReadKey().KeyChar }
+            yield Console.ReadKey().KeyChar
+            Console.WriteLine() }
     
     let getAmount command =
         Console.WriteLine()
@@ -34,7 +35,7 @@ let main _ =
     printfn "Current balance is £%M" openingAccount.Balance
 
     let processCommand account (command, amount) =
-        Console.Clear()
+        printfn ""
         let account =
             if command = 'd' then account |> depositWithAudit amount
             else account |> withdrawWithAudit amount
@@ -48,7 +49,7 @@ let main _ =
         |> Seq.map getAmount
         |> Seq.fold processCommand openingAccount
     
-    Console.Clear()
+    printfn ""
     printfn "Closing Balance:\r\n %A" closingAccount
     Console.ReadKey() |> ignore
 

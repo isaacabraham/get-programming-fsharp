@@ -15,12 +15,12 @@ let main _ =
 
     let openingAccount = { Owner = { Name = name }; Balance = 0M; AccountId = Guid.Empty } 
 
-    // Fill in the main loop here...
     let closingAccount =
+        // Fill in the main loop here...
         openingAccount
 
     Console.Clear()
-    printfn "Closing Balance:\r\n %A" closingAccount.Balance
+    printfn "Closing Balance:\r\n %A" closingAccount
     Console.ReadKey() |> ignore
 
     0
