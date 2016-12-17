@@ -6,27 +6,15 @@ open Capstone3.Operations
 
 let withdrawWithAudit = auditAs "withdraw" Auditing.composedLogger withdraw
 let depositWithAudit = auditAs "deposit" Auditing.composedLogger deposit
+let loadAccountFromDisk = FileRepository.findTransactionsOnDisk >> Operations.loadAccount
 
 [<AutoOpen>]
-module Commands =
-    let accountCommands = 
-        [ 'd', depositWithAudit
-          'w', withdrawWithAudit
-          'x', fun _ account -> account ]
-        |> Map.ofList
-    let isValidCommand = accountCommands.ContainsKey
+module CommandParsing =
+    let isValidCommand cmd = [ 'd'; 'w'; 'x' ] |> List.contains cmd
     let isStopCommand = (=) 'x'
 
-[<EntryPoint>]
-let main _ =
-    let account =
-        let loadAccountFromDisk = FileRepository.findTransactionsOnDisk >> Operations.loadAccount
-        let name =
-            Console.Write "Please enter your name: "
-            Console.ReadLine()
-        loadAccountFromDisk name
-    printfn "Current balance is £%M" account.Balance
-
+[<AutoOpen>]
+module UserInput =
     let commands = seq {
         while true do
             Console.Write "(d)eposit, (w)ithdraw or e(x)it: "
@@ -37,21 +25,31 @@ let main _ =
         Console.Write "Enter Amount: "
         command, Console.ReadLine() |> Decimal.Parse
 
+[<EntryPoint>]
+let main _ =
+    let openingAccount =
+        Console.Write "Please enter your name: "
+        Console.ReadLine() |> loadAccountFromDisk
+    
+    printfn "Current balance is £%M" openingAccount.Balance
+
     let processCommand account (command, amount) =
         Console.Clear()
-        let account = account |> accountCommands.[command] amount
+        let account =
+            if command = 'd' then account |> depositWithAudit amount
+            else account |> withdrawWithAudit amount
         printfn "Current balance is £%M" account.Balance
         account
 
-    let account =
+    let closingAccount =
         commands
         |> Seq.filter isValidCommand
         |> Seq.takeWhile (not << isStopCommand)
         |> Seq.map getAmount
-        |> Seq.fold processCommand account
+        |> Seq.fold processCommand openingAccount
     
     Console.Clear()
-    printfn "Closing Balance:\r\n %A" account
+    printfn "Closing Balance:\r\n %A" closingAccount
     Console.ReadKey() |> ignore
 
     0

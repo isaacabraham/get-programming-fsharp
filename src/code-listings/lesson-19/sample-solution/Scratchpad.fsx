@@ -26,6 +26,9 @@ let account =
     |> Seq.fold processCommand openingAccount
 
 
+
+
+
 #load "Auditing.fs"
 
 open Capstone3.Auditing
