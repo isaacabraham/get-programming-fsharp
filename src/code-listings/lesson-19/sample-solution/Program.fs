@@ -11,7 +11,8 @@ let depositWithAudit = auditAs "deposit" Auditing.composedLogger deposit
 module Commands =
     let accountCommands = 
         [ 'd', depositWithAudit
-          'w', withdrawWithAudit ]
+          'w', withdrawWithAudit
+          'x', fun _ account -> account ]
         |> Map.ofList
     let isValidCommand = accountCommands.ContainsKey
     let isStopCommand = (=) 'x'
@@ -31,15 +32,14 @@ let main _ =
             Console.Write "(d)eposit, (w)ithdraw or e(x)it: "
             yield Console.ReadKey().KeyChar }
     
-    let processCommand account command =
+    let getAmount command =
         Console.WriteLine()
         Console.Write "Enter Amount: "
-        let amount = Console.ReadLine() |> Decimal.Parse
+        command, Console.ReadLine() |> Decimal.Parse
 
+    let processCommand account (command, amount) =
         Console.Clear()
-
         let account = account |> accountCommands.[command] amount
-
         printfn "Current balance is £%M" account.Balance
         account
 
@@ -47,6 +47,7 @@ let main _ =
         commands
         |> Seq.filter isValidCommand
         |> Seq.takeWhile (not << isStopCommand)
+        |> Seq.map getAmount
         |> Seq.fold processCommand account
     
     Console.Clear()
