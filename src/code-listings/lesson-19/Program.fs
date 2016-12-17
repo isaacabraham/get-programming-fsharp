@@ -7,7 +7,7 @@ open Capstone3.Operations
 [<EntryPoint>]
 let main _ =
     let account =
-        let loadAccountFromDisk = Auditing.findTransactionsOnDisk >> Auditing.loadAccount
+        let loadAccountFromDisk = FileRepository.findTransactionsOnDisk >> Operations.loadAccount
         let name =
             Console.Write "Please enter your name: "
             Console.ReadLine()

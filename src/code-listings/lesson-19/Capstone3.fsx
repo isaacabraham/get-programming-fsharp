@@ -15,7 +15,7 @@ let transactions =
       { Transaction.Accepted = true; Timestamp = DateTime.MinValue.AddSeconds 30.; Operation = "deposit"; Amount = 50M }
       { Transaction.Accepted = true; Timestamp = DateTime.MinValue.AddSeconds 50.; Operation = "withdraw"; Amount = 10M } ]
 
-transactions = (transactions |> List.map (Serialization.serializeTransaction >> Serialization.deserializeTransaction))
+transactions = (transactions |> List.map (Transactions.serialize >> Transactions.deserialize))
 
 let accountId = Guid.Empty
 let owner = "Isaac"
