@@ -15,12 +15,12 @@ let deposit amount account =
 /// Runs some account operation such as withdraw or deposit with auditing.
 let auditAs operationName audit operation amount account =
     let audit = audit account.AccountId account.Owner.Name
-    audit (sprintf "%O: Performing a %s operation for £%M..." DateTime.UtcNow operationName amount)
+    audit (sprintf "%O: Performing a %s operation for Â£%M..." DateTime.UtcNow operationName amount)
     let updatedAccount = operation amount account
     
     let accountIsUnchanged = (updatedAccount = account)
 
     if accountIsUnchanged then audit (sprintf "%O: Transaction rejected!" DateTime.UtcNow) 
-    else audit (sprintf "%O: Transaction accepted! Balance is now £%M." DateTime.UtcNow updatedAccount.Balance)
+    else audit (sprintf "%O: Transaction accepted! Balance is now Â£%M." DateTime.UtcNow updatedAccount.Balance)
 
     updatedAccount
