@@ -14,7 +14,7 @@ let deposit amount account =
 
 /// Runs some account operation such as withdraw or deposit with auditing.
 let auditAs operationName audit operation amount account =
-    audit account (sprintf "%O: Performing a %s operation for £%M..." DateTime.UtcNow operationName amount)    
+    audit account (sprintf "%O: Performing a %s operation for £%M..." DateTime.UtcNow operationName amount)
     let updatedAccount = operation amount account
     
     let accountIsUnchanged = (updatedAccount = account)

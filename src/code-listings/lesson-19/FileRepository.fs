@@ -14,7 +14,7 @@ let private findAccountFolder owner =
     else
         let folder = Seq.head folders
         DirectoryInfo(folder).Name
-let buildPath(owner, accountId:Guid) = sprintf @"%s\%s_%O" accountsPath owner accountId
+let private buildPath(owner, accountId:Guid) = sprintf @"%s\%s_%O" accountsPath owner accountId
 
 /// Logs to the file system
 let writeTransaction accountId owner message =

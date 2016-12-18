@@ -14,17 +14,21 @@ let private findAccountFolder owner =
     else
         let folder = Seq.head folders
         DirectoryInfo(folder).Name
-let buildPath(owner, accountId:Guid) = sprintf @"%s\%s_%O" accountsPath owner accountId
+let private buildPath(owner, accountId:Guid) = sprintf @"%s\%s_%O" accountsPath owner accountId
+
+let loadTransactions (folder:string) =
+    let owner, accountId =
+        let parts = folder.Split '_'
+        parts.[0], Guid.Parse parts.[1]
+    owner, accountId, buildPath(owner, accountId)
+                      |> Directory.EnumerateFiles
+                      |> Seq.map (File.ReadAllText >> Transactions.deserialize)
+
+/// Finds all transactions from disk for specific owner.
 let findTransactionsOnDisk owner =
     let folder = findAccountFolder owner
     if String.IsNullOrEmpty folder then owner, Guid.NewGuid(), Seq.empty
-    else
-        let owner, accountId =
-            let parts = folder.Split '_'
-            parts.[0], Guid.Parse parts.[1]
-        owner, accountId, buildPath(owner, accountId)
-                          |> Directory.EnumerateFiles
-                          |> Seq.map (File.ReadAllText >> Transactions.deserialize)
+    else loadTransactions folder
 
 /// Logs to the file system
 let writeTransaction accountId owner transaction =

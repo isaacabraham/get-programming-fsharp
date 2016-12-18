@@ -11,6 +11,6 @@ let composedLogger =
     let loggers =
         [ FileRepository.writeTransaction
           printTransaction ]
-    fun accountId owner transaction ->
+    fun accountId owner message ->
         loggers
-        |> List.iter(fun logger -> logger accountId owner transaction)
+        |> List.iter(fun logger -> logger accountId owner message)
