@@ -4,8 +4,10 @@ open System
 open Capstone4.Domain
 open Capstone4.Operations
 
-let withdrawWithAudit = auditAs "withdraw" Auditing.composedLogger withdraw
-let depositWithAudit = auditAs "deposit" Auditing.composedLogger deposit
+let withdrawWithAudit amount (CreditAccount account as creditAccount) =
+    auditAs "withdraw" Auditing.composedLogger withdraw amount creditAccount account.AccountId account.Owner
+let depositWithAudit amount unratedAccount =
+    auditAs "deposit" Auditing.composedLogger deposit amount unratedAccount unratedAccount.UnratedAccountId unratedAccount.UnratedOwner
 let tryLoadAccountFromDisk = FileRepository.tryFindTransactionsOnDisk >> Option.map Operations.loadAccount
 
 type Command = | AccountCmd of BankOperation | Exit
@@ -52,19 +54,28 @@ let main _ =
         
         owner 
         |> tryLoadAccountFromDisk        
-        |> defaultArg <| { AccountId = Guid.NewGuid()
-                           Balance = 0M
-                           Owner = { Name = owner } }
+        |> defaultArg <|
+            InCredit(CreditAccount { AccountId = Guid.NewGuid()
+                                     Balance = 0M
+                                     Owner = { Name = owner } })
     
-    printfn "Current balance is £%M" openingAccount.Balance
+    printfn "Opening balance is £%M" openingAccount.UnratedBalance
 
     let processCommand account (command, amount) =
         printfn ""
         let account =
             match command with
             | Deposit -> account |> depositWithAudit amount
-            | Withdraw -> account |> withdrawWithAudit amount
-        printfn "Current balance is £%M" account.Balance
+            | Withdraw ->
+                match account with
+                | InCredit account -> account |> withdrawWithAudit amount
+                | Overdrawn _ ->
+                    printfn "You cannot withdraw funds as your account is overdrawn!"
+                    account
+        printfn "Current balance is £%M" account.UnratedBalance
+        match account with
+        | InCredit _ -> ()
+        | Overdrawn _ -> printfn "Your account is overdrawn!!"
         account
 
     let closingAccount =
