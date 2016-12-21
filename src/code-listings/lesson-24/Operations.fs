@@ -1,7 +1,7 @@
-module Capstone3.Operations
+module Capstone4.Operations
 
 open System
-open Capstone3.Domain
+open Capstone4.Domain
 
 /// Withdraws an amount of an account (if there are sufficient funds)
 let withdraw amount account =

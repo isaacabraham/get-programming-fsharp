@@ -1,8 +1,8 @@
-module Capstone3.Program
+module Capstone4.Program
 
 open System
-open Capstone3.Domain
-open Capstone3.Operations
+open Capstone4.Domain
+open Capstone4.Operations
 
 let withdrawWithAudit = auditAs "withdraw" Auditing.composedLogger withdraw
 let depositWithAudit = auditAs "deposit" Auditing.composedLogger deposit

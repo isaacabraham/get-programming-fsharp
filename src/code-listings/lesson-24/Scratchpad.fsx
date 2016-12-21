@@ -1,8 +1,8 @@
 #load "Domain.fs"
 #load "Operations.fs"
 
-open Capstone3.Operations
-open Capstone3.Domain
+open Capstone4.Operations
+open Capstone4.Domain
 open System
 
 // Listing 19.2 (Listing 19.1 is below!)
@@ -36,7 +36,7 @@ let commands = seq {
 
 #load "Auditing.fs"
 
-open Capstone3.Auditing
+open Capstone4.Auditing
 
 // Test out create account from transaction history
 let transactions =
