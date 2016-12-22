@@ -23,28 +23,25 @@ module CommandParsing =
 
 [<AutoOpen>]
 module UserInput =
-    let commands = seq {
-        while true do
+    let commands =
+        Seq.initInfinite(fun _ ->
             Console.Write "(d)eposit, (w)ithdraw or e(x)it: "
-            yield Console.ReadKey().KeyChar
-            Console.WriteLine() }
+            let output = Console.ReadKey().KeyChar
+            Console.WriteLine()
+            output)
     
     let getAmount command =
-        let seqOfAmounts =
-            Seq.initInfinite(fun _ ->
-                Console.WriteLine()
-                Console.Write "Enter Amount: "
-                Console.ReadLine() |> Decimal.TryParse)
-        
-        let validAmount =
-            seqOfAmounts
-            |> Seq.choose(fun amount ->
-                match amount with
-                | true, amount -> Some amount
-                | false, _ -> None)
-            |> Seq.head
-
-        command, validAmount
+        let captureAmount _ =
+            Console.WriteLine()
+            Console.Write "Enter Amount: "
+            Console.ReadLine() |> Decimal.TryParse
+        Seq.initInfinite captureAmount
+        |> Seq.choose(fun amount ->
+            match amount with
+            | true, amount when amount <= 0M -> None
+            | false, _ -> None
+            | true, amount -> Some(command, amount))
+        |> Seq.head
 
 [<EntryPoint>]
 let main _ =

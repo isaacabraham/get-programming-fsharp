@@ -7,7 +7,9 @@ type Customer = { Name : string }
 type Account = { AccountId : Guid; Owner : Customer; Balance : decimal }
 type Transaction = { Timestamp : DateTime; Operation : string; Amount : decimal }
 
+/// Represents a bank account that is known to be in credit.
 type CreditAccount = CreditAccount of Account
+/// A bank account which can either be in credit or overdrawn.
 type UnratedAccount =
     | InCredit of CreditAccount
     | Overdrawn of Account
