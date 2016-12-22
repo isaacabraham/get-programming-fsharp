@@ -42,10 +42,9 @@ let loadAccount (owner, accountId, transactions) =
     transactions
     |> Seq.sortBy(fun txn -> txn.Timestamp)
     |> Seq.fold(fun account txn ->
-        match tryParseSerializedOperation txn.Operation with
-        | Some Deposit -> account |> deposit txn.Amount
-        | Some Withdraw ->
-            match account with
-            | InCredit account -> account |> withdraw txn.Amount
-            | account -> account
-        | None -> account) openingAccount
+        let operation = tryParseSerializedOperation txn.Operation
+        match operation, account with
+        | Some Deposit, _ -> account |> deposit txn.Amount
+        | Some Withdraw, InCredit account -> account |> withdraw txn.Amount
+        | Some Withdraw, Overdrawn _ -> account
+        | None, _ -> account) openingAccount

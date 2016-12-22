@@ -5,48 +5,32 @@ open Capstone4.Operations
 open Capstone4.Domain
 open System
 
-// Listing 19.2 (Listing 19.1 is below!)
-let isValidCommand = (Set [ 'w';'d';'x']).Contains
-let isStopCommand = (=) 'x'
-let getAmount command =
-    if command = 'd' then 'd', 50M
-    elif command = 'w' then 'w', 25M
-    else command, 0M
-let processCommand account (command, amount) =
-    if command = 'd' then account |> deposit amount
-    else account |> withdraw amount
+type CreditAccount = CreditAccount of Account
 
-// Listing 19.1
-let openingAccount = { Owner = { Name = "Isaac" }; Balance = 0M; AccountId = Guid.Empty } 
-let account =
-    let commands = [ 'd'; 'w'; 'z'; 'f'; 'd'; 'x'; 'w' ]
+type RatedAccount =
+    | Credit of CreditAccount
+    | Overdrawn of Account
 
-    commands
-    |> Seq.filter isValidCommand
-    |> Seq.takeWhile (not << isStopCommand)
-    |> Seq.map getAmount
-    |> Seq.fold processCommand openingAccount
+let rateAccount account =
+    if account.Balance < 0M then Overdrawn account
+    else Credit(CreditAccount account)
 
-// Listing 19.3
-let commands = seq {
-    while true do
-        Console.Write "(d)eposit, (w)ithdraw or e(x)it: "
-        yield Console.ReadKey().KeyChar }
+let withdraw amount (CreditAccount account) =
+    { account with Balance = account.Balance - amount }
+    |> rateAccount
+
+let deposit amount account =
+    let account =
+        match account with
+        | Credit (CreditAccount account) -> account
+        | Overdrawn account -> account
+    { account with Balance = account.Balance + amount }
+    |> rateAccount
 
 
-#load "Auditing.fs"
+let myAccount = { Balance = 0M; Owner = { Name = "Isaac" }; AccountId = Guid.NewGuid() } |> rateAccount
 
-open Capstone4.Auditing
-
-// Test out create account from transaction history
-let transactions =
-    [ { Transaction.Accepted = false; Timestamp = DateTime.MinValue; Operation = "withdraw"; Amount = 10M }
-      { Transaction.Accepted = true; Timestamp = DateTime.MinValue.AddSeconds 10.; Operation = "withdraw"; Amount = 10M }
-      { Transaction.Accepted = true; Timestamp = DateTime.MinValue.AddSeconds 30.; Operation = "deposit"; Amount = 50M }
-      { Transaction.Accepted = true; Timestamp = DateTime.MinValue.AddSeconds 50.; Operation = "withdraw"; Amount = 10M } ]
-
-transactions = (transactions |> List.map (Transactions.serialize >> Transactions.deserialize))
-
-let accountId = Guid.Empty
-let owner = "Isaac"
-let loadedAccount = loadAccount(owner, accountId, transactions)
+myAccount
+|> deposit 50M
+|> deposit 100M
+|> withdraw 500M

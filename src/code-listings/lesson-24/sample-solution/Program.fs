@@ -6,8 +6,10 @@ open Capstone4.Operations
 
 let withdrawWithAudit amount (CreditAccount account as creditAccount) =
     auditAs "withdraw" Auditing.composedLogger withdraw amount creditAccount account.AccountId account.Owner
-let depositWithAudit amount unratedAccount =
-    auditAs "deposit" Auditing.composedLogger deposit amount unratedAccount unratedAccount.UnratedAccountId unratedAccount.UnratedOwner
+let depositWithAudit amount (ratedAccount:RatedAccount) =
+    let accountId = ratedAccount.GetField (fun a -> a.AccountId)
+    let owner = ratedAccount.GetField(fun a -> a.Owner)
+    auditAs "deposit" Auditing.composedLogger deposit amount ratedAccount accountId owner
 let tryLoadAccountFromDisk = FileRepository.tryFindTransactionsOnDisk >> Option.map Operations.loadAccount
 
 type Command = | AccountCmd of BankOperation | Exit
@@ -56,7 +58,7 @@ let main _ =
                                      Balance = 0M
                                      Owner = { Name = owner } })
     
-    printfn "Opening balance is £%M" openingAccount.UnratedBalance
+    printfn "Opening balance is £%M" (openingAccount.GetField(fun a -> a.Balance))
 
     let processCommand account (command, amount) =
         printfn ""
@@ -69,7 +71,7 @@ let main _ =
                 | Overdrawn _ ->
                     printfn "You cannot withdraw funds as your account is overdrawn!"
                     account
-        printfn "Current balance is £%M" account.UnratedBalance
+        printfn "Current balance is £%M" (account.GetField(fun a -> a.Balance))
         match account with
         | InCredit _ -> ()
         | Overdrawn _ -> printfn "Your account is overdrawn!!"

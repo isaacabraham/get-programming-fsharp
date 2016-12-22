@@ -10,16 +10,13 @@ type Transaction = { Timestamp : DateTime; Operation : string; Amount : decimal 
 /// Represents a bank account that is known to be in credit.
 type CreditAccount = CreditAccount of Account
 /// A bank account which can either be in credit or overdrawn.
-type UnratedAccount =
+type RatedAccount =
     | InCredit of CreditAccount
     | Overdrawn of Account
-    member private this.Account = 
+    member this.GetField getter =
         match this with
-        | InCredit (CreditAccount account)
-        | Overdrawn account -> account
-    member this.UnratedBalance = this.Account.Balance
-    member this.UnratedAccountId = this.Account.AccountId
-    member this.UnratedOwner = this.Account.Owner
+        | InCredit (CreditAccount account) -> getter account
+        | Overdrawn account -> getter account
 
 module Transactions =
     /// Serializes a transaction
