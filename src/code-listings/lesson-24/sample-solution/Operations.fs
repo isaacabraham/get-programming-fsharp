@@ -25,7 +25,6 @@ let deposit amount account =
 let auditAs operationName audit operation amount account accountId owner =
     let updatedAccount = operation amount account
     let transaction = { Operation = operationName; Amount = amount; Timestamp = DateTime.UtcNow }
-
     audit accountId owner.Name transaction
     updatedAccount
 

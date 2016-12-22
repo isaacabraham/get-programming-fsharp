@@ -34,7 +34,6 @@ module UserInput =
     
     let getAmount command =
         let captureAmount _ =
-            Console.WriteLine()
             Console.Write "Enter Amount: "
             Console.ReadLine() |> Decimal.TryParse
         Seq.initInfinite captureAmount

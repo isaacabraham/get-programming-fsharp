@@ -34,3 +34,16 @@ myAccount
 |> deposit 50M
 |> deposit 100M
 |> withdraw 500M
+
+let withdrawSafe amount ratedAccount =
+    match ratedAccount with
+    | Credit account -> account |> withdraw amount
+    | Overdrawn _ ->
+        printfn "Your account is overdrawn - withdrawal rejected!"
+        ratedAccount
+
+myAccount
+|> deposit 50M
+|> deposit 100M
+|> withdrawSafe 500M
+|> withdrawSafe 500M
