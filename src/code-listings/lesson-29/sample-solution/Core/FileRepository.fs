@@ -3,6 +3,7 @@
 open Capstone5.Domain
 open System.IO
 open System
+open Newtonsoft.Json
 
 let private accountsPath =
     let path = @"accounts"
@@ -22,7 +23,7 @@ let loadTransactions (folder:string) =
         parts.[0], Guid.Parse parts.[1]
     owner, accountId, buildPath(owner, accountId)
                       |> Directory.EnumerateFiles
-                      |> Seq.map (File.ReadAllText >> Transactions.deserialize)
+                      |> Seq.map (fun path -> JsonConvert.DeserializeObject<Transaction>(File.ReadAllText path))
 
 /// Finds all transactions from disk for specific owner.
 let tryFindTransactionsOnDisk = tryFindAccountFolder >> Option.map loadTransactions
@@ -32,5 +33,5 @@ let writeTransaction accountId owner transaction =
     let path = buildPath(owner, accountId)    
     path |> Directory.CreateDirectory |> ignore
     let filePath = sprintf "%s/%d.txt" path (transaction.Timestamp.ToFileTimeUtc())
-    let line = sprintf "%O***%s***%M" transaction.Timestamp transaction.Operation transaction.Amount
+    let line = transaction |> JsonConvert.SerializeObject
     File.WriteAllText(filePath, line)

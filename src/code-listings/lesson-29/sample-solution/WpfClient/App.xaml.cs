@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 
-namespace WpfClient
+namespace Capstone5
 {
     /// <summary>
     /// Interaction logic for App.xaml
