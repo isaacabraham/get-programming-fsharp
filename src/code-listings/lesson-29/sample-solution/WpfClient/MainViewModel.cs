@@ -8,7 +8,7 @@ namespace Capstone5
     [ImplementPropertyChanged]
     public class MainViewModel
     {
-        public string Owner { get; private set; }
+        public Customer Owner { get; private set; }
         public Command<int> DepositCommand { get; private set; }
         public Command<int> WithdrawCommand { get; private set; }
         public int Balance { get; private set; }
@@ -37,21 +37,21 @@ namespace Capstone5
 
         public MainViewModel()
         {
-            Owner = "isaac";
+            Owner = new Customer("isaac");
             Transactions = new ObservableCollection<Transaction>();
             this.LoadTransactions();
             UpdateAccount(Api.LoadAccount(Owner));
             DepositCommand = new Command<int>(
                 amount =>
                 {
-                    UpdateAccount(Api.Deposit(amount, account));
+                    UpdateAccount(Api.Deposit(amount, Owner));
                     WithdrawCommand.Refresh();
                 }, TryParseInt);
             WithdrawCommand = new Command<int>(
                 amount =>
                 {
                     var creditAccount = (RatedAccount.InCredit)account;
-                    UpdateAccount(Api.Withdraw(amount, creditAccount.Account));
+                    UpdateAccount(Api.Withdraw(amount, Owner));
                 },
                 TryParseInt,
                 () => account.IsInCredit);
