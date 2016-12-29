@@ -44,7 +44,6 @@ module UserInput =
             | true, amount -> Some(command, amount))
         |> Seq.head
 
-[<EntryPoint>]
 let main _ =
     let openingAccount =
         Console.Write "Please enter your name: "
