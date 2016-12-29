@@ -1,4 +1,4 @@
-module Capstone5.Operations
+module internal Capstone5.Operations
 
 open System
 open Capstone5.Domain

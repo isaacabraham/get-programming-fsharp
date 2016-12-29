@@ -10,15 +10,12 @@ namespace Capstone5
     [ImplementPropertyChanged]
     public class MainViewModel
     {
-        public ICollectionView TransactionsView { get { return cvs.View; } }
         public string Owner { get; private set; }
         public Command<int> DepositCommand { get; private set; }
         public Command<int> WithdrawCommand { get; private set; }
         public int Balance { get; private set; }
-
+        public ObservableCollection<Transaction> Transactions { get; private set; }
         private RatedAccount account;
-        private readonly ObservableCollection<Transaction> transactions = new ObservableCollection<Transaction>();
-        private readonly CollectionViewSource cvs;
         private Tuple<bool, int> TryParseInt(object value)
         {
             int output = 0;
@@ -26,28 +23,26 @@ namespace Capstone5
             return Tuple.Create(parsed, output);
         }
 
-        private void UpdateAccount(RatedAccount account)
+        private void UpdateAccount(RatedAccount newAccount)
         {
-            this.account = account;
+            this.account = newAccount;
             this.LoadTransactions();
             this.Balance = (int)account.Balance;
         }
 
         private void LoadTransactions()
         {
-            transactions.Clear();
+            Transactions.Clear();
             foreach (var txn in Api.LoadTransactionHistory(Owner))
-                transactions.Add(txn);
+                Transactions.Add(txn);
         }
 
         public MainViewModel()
         {
             Owner = "isaac";
-            cvs = new CollectionViewSource { Source = transactions };
-            cvs.SortDescriptions.Add(new SortDescription("Timestamp", ListSortDirection.Descending));
+            Transactions = new ObservableCollection<Transaction>();
             this.LoadTransactions();
             UpdateAccount(Api.LoadAccount(Owner));
-
             DepositCommand = new Command<int>(
                 amount =>
                 {

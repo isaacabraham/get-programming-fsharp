@@ -1,4 +1,4 @@
-module Capstone5.Auditing
+module internal Capstone5.Auditing
 
 open Capstone5.Domain
 

@@ -4,11 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Capstone5"
+        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         mc:Ignorable="d"
         Title="Learn F# - Bank Accounts" Height="350" Width="525">
     <Window.DataContext>
         <local:MainViewModel/>
     </Window.DataContext>
+    <Window.Resources>
+        <CollectionViewSource x:Key="cvs" Source="{Binding Transactions}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Timestamp" Direction="Descending"/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+    </Window.Resources>
     <Grid>
         <DockPanel>
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
@@ -21,7 +29,7 @@
                 <TextBlock VerticalAlignment="Center" Text="Current Balance: £" Margin="3"/>
                 <TextBlock VerticalAlignment="Center" Text="{Binding Balance}" Margin="3"/>
             </StackPanel>
-            <DataGrid Padding="3" Margin="3" ItemsSource="{Binding TransactionsView}"/>
+            <DataGrid Padding="3" Margin="3" ItemsSource="{Binding Source={StaticResource ResourceKey=cvs}}"/>
         </DockPanel>
 
     </Grid>

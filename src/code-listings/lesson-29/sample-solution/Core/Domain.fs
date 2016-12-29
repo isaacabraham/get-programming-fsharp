@@ -2,18 +2,24 @@ namespace Capstone5.Domain
 
 open System
 
-type BankOperation = Deposit | Withdraw
+type internal BankOperation = Deposit | Withdraw
+
+/// A customer of the bank.
 type Customer = { Name : string }
+/// An account held at the bank.
 type Account = { AccountId : Guid; Owner : Customer; Balance : decimal }
+/// A single transaction that has occurred.
 type Transaction = { Timestamp : DateTime; Operation : string; Amount : decimal }
 
 /// Represents a bank account that is known to be in credit.
 type CreditAccount = CreditAccount of Account
 /// A bank account which can either be in credit or overdrawn.
 type RatedAccount =
+    /// Represents an account that is known to be in credit.
     | InCredit of Account:CreditAccount
+    /// Represents an account that is known to be overdrawn.
     | Overdrawn of Account:Account
-    member this.GetField getter =
+    member internal this.GetField getter =
         match this with
         | InCredit (CreditAccount account) -> getter account
         | Overdrawn account -> getter account

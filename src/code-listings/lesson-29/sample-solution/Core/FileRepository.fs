@@ -1,4 +1,4 @@
-﻿module Capstone5.FileRepository
+﻿module internal Capstone5.FileRepository
 
 open Capstone5.Domain
 open System.IO
