@@ -13,7 +13,7 @@ let LoadAccount customer =
     |> defaultArg <|
         InCredit(CreditAccount { AccountId = Guid.NewGuid()
                                  Balance = 0M
-                                 Owner = { Name = customer.Name } })
+                                 Owner = customer })
 /// Deposits funds into an account.
 let Deposit amount customer =
     let ratedAccount = LoadAccount customer
