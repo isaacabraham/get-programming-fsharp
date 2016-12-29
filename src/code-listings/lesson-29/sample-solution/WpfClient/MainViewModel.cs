@@ -48,11 +48,7 @@ namespace Capstone5
                     WithdrawCommand.Refresh();
                 }, TryParseInt);
             WithdrawCommand = new Command<int>(
-                amount =>
-                {
-                    var creditAccount = (RatedAccount.InCredit)account;
-                    UpdateAccount(Api.Withdraw(amount, Owner));
-                },
+                amount => UpdateAccount(Api.Withdraw(amount, Owner)),
                 TryParseInt,
                 () => account.IsInCredit);
         }
