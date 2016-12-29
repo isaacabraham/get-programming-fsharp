@@ -13,9 +13,9 @@ let Deposit (amount:decimal) (ratedAccount:RatedAccount) : RatedAccount =
 let Withdraw (amount:decimal) (creditAccount:CreditAccount) : RatedAccount =
     InCredit creditAccount
     
-/// Loads the transaction history for an owner.
-let LoadTransactionHistory(owner:string) : Transaction array =
-    Array.empty
+/// Loads the transaction history for an owner. If no transactions exist, returns an empty sequence.
+let LoadTransactionHistory(owner:string) : Transaction seq =
+    Seq.empty
 
 /// Loads an account from disk. If no account exists, an empty one is automatically created.
 let LoadAccount(owner:string) : RatedAccount =
