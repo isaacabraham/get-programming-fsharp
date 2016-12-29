@@ -5,9 +5,11 @@ open Capstone5.Domain
 open Capstone5.Operations
 open System
 
-/// Loads the transaction history for an owner. If no transactions exist, returns an empty sequence.
-let LoadTransactionHistory(customer:Customer) : Transaction seq =
-    Seq.empty
+/// Loads an account from disk. If no account exists, an empty one is automatically created.
+let LoadAccount (customer:Customer) : RatedAccount =
+    InCredit(CreditAccount { AccountId = Guid.NewGuid()
+                             Balance = 0M
+                             Owner = customer })
 
 /// Deposits funds into an account.
 let Deposit (amount:decimal) (customer:Customer) : RatedAccount =
@@ -21,8 +23,7 @@ let Withdraw (amount:decimal) (customer:Customer) : RatedAccount =
                              Balance = 0M
                              Owner = customer })
                                  
-/// Loads an account from disk. If no account exists, an empty one is automatically created.
-let LoadAccount (customer:Customer) : RatedAccount =
-    InCredit(CreditAccount { AccountId = Guid.NewGuid()
-                             Balance = 0M
-                             Owner = customer })
+/// Loads the transaction history for an owner. If no transactions exist, returns an empty sequence.
+let LoadTransactionHistory(customer:Customer) : Transaction seq =
+    Seq.empty
+
