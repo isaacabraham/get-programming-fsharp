@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Name>Capstone3</Name>
-    <AssemblyName>Capstone3</AssemblyName>
-    <RootNamespace>Capstone3</RootNamespace>
+    <Name>Capstone5</Name>
+    <AssemblyName>Capstone5</AssemblyName>
+    <RootNamespace>Capstone5</RootNamespace>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>

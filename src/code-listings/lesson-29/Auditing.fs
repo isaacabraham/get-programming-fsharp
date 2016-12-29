@@ -1,6 +1,6 @@
-module Capstone4.Auditing
+module Capstone5.Auditing
 
-open Capstone4.Domain
+open Capstone5.Domain
 
 /// Logs to the console
 let printTransaction _ accountId transaction =

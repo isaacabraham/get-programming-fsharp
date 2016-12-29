@@ -1,6 +1,6 @@
 #load "Domain.fs"
 #load "Operations.fs"
 
-open Capstone4.Operations
-open Capstone4.Domain
+open Capstone5.Operations
+open Capstone5.Domain
 open System

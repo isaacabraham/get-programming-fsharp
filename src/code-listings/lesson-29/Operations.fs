@@ -1,7 +1,7 @@
-module Capstone4.Operations
+module Capstone5.Operations
 
 open System
-open Capstone4.Domain
+open Capstone5.Domain
 
 let private classifyAccount account =
     if account.Balance >= 0M then (InCredit(CreditAccount account))

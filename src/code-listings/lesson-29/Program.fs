@@ -1,8 +1,8 @@
-module Capstone4.Program
+module Capstone5.Program
 
 open System
-open Capstone4.Domain
-open Capstone4.Operations
+open Capstone5.Domain
+open Capstone5.Operations
 
 let withdrawWithAudit amount (CreditAccount account as creditAccount) =
     auditAs "withdraw" Auditing.composedLogger withdraw amount creditAccount account.AccountId account.Owner
