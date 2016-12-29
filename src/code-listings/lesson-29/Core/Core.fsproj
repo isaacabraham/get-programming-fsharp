@@ -9,7 +9,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>5194054c-0572-4e34-9d53-9748b6641595</ProjectGuid>
     <ProjectType />
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -59,6 +59,7 @@
     <Compile Include="Operations.fs" />
     <Compile Include="FileRepository.fs" />
     <Compile Include="Auditing.fs" />
+    <Compile Include="Api.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
     <None Include="Scratchpad.fsx" />
