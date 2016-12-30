@@ -22,8 +22,8 @@ let buildDtThisMonth = buildDtThisYear DateTime.UtcNow.Month
 
 // Listing 11.5
 open System.IO
-let writeToFile date filename text =
-    let path = sprintf "%O-%s.txt" date filename
+let writeToFile (date:DateTime) filename text =
+    let path = sprintf "%O-%s.txt" (date.ToString "yyMMdd") filename
     File.WriteAllText(path, text)
 
 // Listing 11.6
