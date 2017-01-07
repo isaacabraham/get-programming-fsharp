@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpWeb", "FSharpWeb\FSharpWeb.fsproj", "{AD519605-CD3B-47D4-8C6F-36DA05567C01}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "WebConsole", "WebConsole\WebConsole.fsproj", "{BAC64CA1-8059-4196-8CDA-729D9979E822}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SuaveApp", "SuaveApp\SuaveApp.fsproj", "{AB53FF1B-5C0F-4951-8FF8-C5578154F33C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AD519605-CD3B-47D4-8C6F-36DA05567C01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD519605-CD3B-47D4-8C6F-36DA05567C01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD519605-CD3B-47D4-8C6F-36DA05567C01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD519605-CD3B-47D4-8C6F-36DA05567C01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAC64CA1-8059-4196-8CDA-729D9979E822}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAC64CA1-8059-4196-8CDA-729D9979E822}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAC64CA1-8059-4196-8CDA-729D9979E822}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAC64CA1-8059-4196-8CDA-729D9979E822}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB53FF1B-5C0F-4951-8FF8-C5578154F33C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB53FF1B-5C0F-4951-8FF8-C5578154F33C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB53FF1B-5C0F-4951-8FF8-C5578154F33C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB53FF1B-5C0F-4951-8FF8-C5578154F33C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
