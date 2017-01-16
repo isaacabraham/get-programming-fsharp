@@ -6,3 +6,5 @@ nuget FSharp.Data
 nuget XPlot.GoogleCharts
 nuget FSharp.Data.SqlClient
 nuget SqlProvider
+nuget Http.fs 1.5.1
+nuget SwaggerProvider
