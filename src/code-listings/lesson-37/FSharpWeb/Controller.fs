@@ -21,15 +21,17 @@ module AnimalsRepository =
 
 [<AutoOpen>]
 module Helpers =
+    open System.Web
+
     /// Gets an Async<Option<Result<T>>> and maps it to an Task<HttpResponseMessage>.
-    let asResponseAsync (createResponse:HttpStatusCode * obj -> HttpResponseMessage) result =
+    let asResponseAsync (request:HttpRequestMessage) result =
         async {
             let! result = result
             return
                 match result with
-                | Some (Failure errorMessage) -> createResponse(HttpStatusCode.BadRequest, errorMessage)
-                | Some (Success result) -> createResponse(HttpStatusCode.Accepted, result)
-                | None -> createResponse(HttpStatusCode.NotFound, null)
+                | Some (Failure errorMessage) -> request.CreateErrorResponse(HttpStatusCode.BadRequest, errorMessage)
+                | Some (Success result) -> request.CreateResponse(HttpStatusCode.OK, result)
+                | None -> request.CreateResponse(HttpStatusCode.NotFound)
         } |> Async.StartAsTask
     
     /// A simple wrapper function to lift a non-async response into an async response
@@ -47,4 +49,4 @@ type AnimalsController() =
     [<Route("animals/{name}")>]
     member this.Get(name) =
         AnimalsRepository.getAnimal name
-        |> asResponseAsync this.Request.CreateResponse
+        |> asResponseAsync this.Request
