@@ -38,16 +38,16 @@ printHelloWorld |> Async.Start
 
 // Listing 36.5
 let random = System.Random()
-let pickANumberAsync() =
+let pickANumberAsync =
     async { return random.Next(10) }
 
-let createFiftyNumbers() =
-    let workflows = [ for _ in 1 .. 50 -> pickANumberAsync() ]
+let createFiftyNumbers =
+    let workflows = [ for _ in 1 .. 50 -> pickANumberAsync ]
     async {
         let! numbers = workflows |> Async.Parallel
         printfn "Total is %d" (numbers |> Array.sum) }
     
-createFiftyNumbers() |> Async.Start
+createFiftyNumbers |> Async.Start
 
 // Listing 36.6
 let urls = [| "http://www.fsharp.org"; "http://microsoft.com"; "http://fsharpforfunandprofit.com" |]
