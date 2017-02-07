@@ -30,7 +30,12 @@ let calculatePremiumForCustomer customer =
         printfn "No score supplied! Using temporary premium."
         300
 
-// Listing 22.7
+// Listing 22.7a
+let tryFindCustomer cId = if cId = 10 then Some drivers.[0] else None
+let getSafetyScore customer = customer.SafetyScore
+let score = tryFindCustomer 10 |> Option.bind getSafetyScore
+
+// Listing 22.8
 let customer = drivers.[0]
 let describe safetyScore = if safetyScore > 200 then "Safe" else "High Risk"
 
