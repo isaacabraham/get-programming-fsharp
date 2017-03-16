@@ -82,3 +82,13 @@ module Lazy =
     
     let text = lazyText.Value
     let text2 = lazyText.Value
+
+// Recursion
+module Recursion =
+    let rec factorial number total =
+        if number = 1 then total
+        else
+            printfn "Number %d" number
+            factorial (number - 1) (total * number)
+    
+    factorial 5 1
