@@ -12,7 +12,7 @@ let describeAge age =
 
 // Listing 7.6
 let writeTextToDisk text =
-    let path = System.IO.Path.GetTempPath()
+    let path = System.IO.Path.GetTempFileName()
     System.IO.File.WriteAllText(path, text)
     path
     
