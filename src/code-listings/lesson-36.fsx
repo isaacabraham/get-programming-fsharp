@@ -1,10 +1,23 @@
 // Listing 36.1
+printfn "Loading data!"
+System.Threading.Thread.Sleep(5000)
+printfn "Loaded Data!"
+printfn "My name is Simon."
+
+async {
+    printfn "Loading data!"
+    System.Threading.Thread.Sleep(5000)
+    printfn "Loaded Data!" }
+|> Async.Start
+printfn "My name is Simon."
+
+// Listing 36.2
 let asyncHello : Async<string> = async { return "Hello" }
 let length = asyncHello.Length
 let text = asyncHello |> Async.RunSynchronously
 let lengthTwo = text.Length
 
-// Listing 36.2
+// Listing 36.3
 open System.Threading
 let printThread text = printfn "THREAD %d: %s" Thread.CurrentThread.ManagedThreadId text
 let doWork() =
@@ -24,11 +37,11 @@ let asyncLength =
 
 asyncLength |> Async.RunSynchronously
 
-// Listing 36.3
+// Listing 36.4
 let getTextAsync = async { return "HELLO" }
 Async.StartWithContinuations(getTextAsync, (fun text -> printfn "%s WORLD" text), ignore, ignore)
 
-// Listing 36.4
+// Listing 36.5
 let printHelloWorld =
     async {
         let! text = getTextAsync
@@ -36,7 +49,7 @@ let printHelloWorld =
 
 printHelloWorld |> Async.Start
 
-// Listing 36.5
+// Listing 36.6
 let random = System.Random()
 let pickANumberAsync =
     async { return random.Next(10) }
@@ -49,7 +62,7 @@ let createFiftyNumbers =
     
 createFiftyNumbers |> Async.Start
 
-// Listing 36.6
+// Listing 36.7
 let urls = [| "http://www.fsharp.org"; "http://microsoft.com"; "http://fsharpforfunandprofit.com" |]
 let downloadData url = async {
     use wc = new System.Net.WebClient()
@@ -65,7 +78,7 @@ let downloadedBytes =
     
 printfn "You downloaded %d characters" (Array.sum downloadedBytes)
 
-// Listing 36.7
+// Listing 36.8
 let downloadData url = async {
     use wc = new System.Net.WebClient()
     printfn "Downloading data on thread %d" System.Threading.Thread.CurrentThread.ManagedThreadId
@@ -80,7 +93,7 @@ let downloadedBytes =
     
 printfn "You downloaded %d characters" (Array.sum downloadedBytes.Result)
 
-// Listing 36.8
+// Listing 36.9
 type Maybe() =
     member __.Bind(opt, func) = opt |> Option.bind func
     member __.Return v = Some v
