@@ -1,6 +1,7 @@
 //  Listing 30.1
 #I @"..\..\packages"
 #r @"FSharp.Data\lib\net40\FSharp.Data.dll"
+#r @"Newtonsoft.Json\lib\net45\Newtonsoft.Json.dll"
 
 open FSharp.Data
 type Football = CsvProvider< @"..\..\data\FootballResults.csv">
