@@ -24,8 +24,18 @@ let getAnimalSafe animal =
     |> ofFunc
 let frodo = getAnimalSafe "frodo"
 
+#r @"Http.fs\lib\net40\HttpClient.dll"
+open HttpClient
 
 // Listing 38.4
+
+createRequest Get "http://host/api/animals"
+|> withCookie { name = "Foo"; value = "Bar" }
+|> withHeader (ContentType "test/json")
+|> withKeepAlive true
+|> getResponse
+
+// Listing 38.5
 #r @"Http.fs\lib\net40\HttpClient.dll"
 open HttpClient
 let request = createRequest Get "http://localhost:8080/api/animals"
@@ -38,7 +48,6 @@ let buildRoute = sprintf "http://localhost:8080/api/%s"
 let httpGetResponse = buildRoute >> createRequest Get >> getResponse
 
 // Listing 38.7
-
 type Animal = { Name : string; Species : string }
 let tryGetAnimal animal =
     let response = sprintf "animals/%s" animal |> httpGetResponse
