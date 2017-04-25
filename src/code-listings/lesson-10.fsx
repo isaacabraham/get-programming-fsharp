@@ -29,7 +29,7 @@ let address : Address =
       Town = "The Town"
       City = "The City" }
 
-let addressVersionTwo =
+let addressExplicit =
     { Address.Street = "The Street"
       Town = "The Town"
       City = "The City" }
@@ -38,7 +38,7 @@ let addressVersionTwo =
 let updatedCustomer = { customer with Age = 31; EmailAddress = "joe@bloggs.co.uk" }
 
 // Listing 10.8
-let isSameAddress = (address = addressVersionTwo)
+let isSameAddress = (address = addressExplicit)
 
 // Now you try
 let updateAge customer =
