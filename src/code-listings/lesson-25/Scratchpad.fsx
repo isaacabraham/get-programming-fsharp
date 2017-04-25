@@ -1,4 +1,4 @@
-﻿// Listing 21.3
+﻿// Listing 25.3
 #I @"CSharpProject\bin\debug"
 #r @"CSharpProject.dll"
 // Or all in one line: #r @"CSharpProject\bin\debug\CSharpProject.dll"
@@ -7,12 +7,12 @@ open CSharpProject
 let simon = Person "Simon"
 simon.PrintName()
 
-// Listing 21.4
+// Listing 25.4
 let people =
     [ "Tony"; "Fred"; "Samantha"; "Brad"; "Sophie "]
     |> List.map Person
 
-// Listing 21.5
+// Listing 25.5
 open System.Collections.Generic
 
 type PersonComparer() =
