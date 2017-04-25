@@ -72,6 +72,18 @@ module Casting =
     let downcastToAppException = anException :?> ApplicationException
     let downcastToString = anException :?> string
 
+// Active Patterns
+module ActivePatterns =
+    let (|Long|Medium|Short|) (value:string) =
+        if value.Length < 5 then Short
+        elif value.Length < 10 then Medium
+        else Long
+
+    match "Hello" with
+    | Short -> "This is a short string!"
+    | Medium -> "This is a medium string!"
+    | Long -> "This is a long string!"
+
 // Lazy Computations
 module Lazy =
     let lazyText =
