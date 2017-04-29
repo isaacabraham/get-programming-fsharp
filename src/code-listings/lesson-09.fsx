@@ -1,3 +1,7 @@
+(* Note the listings below make use of the "do" keyword. These simply allow us to declare
+   an abitrary scope so that we can re-use symbols e.g. "name" without getting warnings from the
+   compiler. This is only required for symbols declared directly within scripts. *)
+
 // Listing 9.3
 do
     let parseName(name:string) =
