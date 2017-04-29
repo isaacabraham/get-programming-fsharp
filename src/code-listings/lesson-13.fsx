@@ -43,3 +43,5 @@ let writeToFile text = File.WriteAllText(@"C:\temp\output.txt", text)
 let printToFile = printCustomerAge writeToFile
 printToFile { Age = 21 }
 
+let contentsFromDisk = File.ReadAllText @"C:\temp\output.txt"
+
