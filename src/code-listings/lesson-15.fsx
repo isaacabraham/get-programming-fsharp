@@ -39,20 +39,18 @@ let isAwayWin result = result.AwayGoals > result.HomeGoals
 
 results
 |> List.filter isAwayWin
-|> List.countBy(fun x -> x.AwayTeam)
+|> List.countBy(fun result -> result.AwayTeam)
 |> List.sortByDescending(fun (_, awayWins) -> awayWins)
 
 // Listing 15.5
-let numbers = [| 1; 2; 3; 4; 6 |]
-let firstNumber = numbers.[0]
-let firstThreeNumbers = numbers.[0 .. 2]
-numbers.[0] <- 99
+let numbersArray = [| 1; 2; 3; 4; 6 |]
+let firstNumber = numbersArray.[0]
+let firstThreeNumbers = numbersArray.[0 .. 2]
+numbersArray.[0] <- 99
 
 // Listing 15.6
-do
-    let numbers = [ 1; 2; 3; 4; 5; 6 ]
-    let numbersQuick = [ 1 .. 6 ]
-    let head :: tail = numbers
-    let moreNumbers = 0 :: numbers
-    let evenMoreNumbers = moreNumbers @ [ 7 .. 9 ]
-    ()
+let numbers = [ 1; 2; 3; 4; 5; 6 ]
+let numbersQuick = [ 1 .. 6 ]
+let head :: tail = numbers
+let moreNumbers = 0 :: numbers
+let evenMoreNumbers = moreNumbers @ [ 7 .. 9 ]
