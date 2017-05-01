@@ -27,30 +27,6 @@ let arrayOfChars = [| for c in 'a' .. 'z' -> Char.ToUpper c |]
 let listOfSquares = [ for i in 1 .. 10 -> i * i ]
 let seqOfStrings = seq { for i in 2 .. 4 .. 20 -> sprintf "Number %d" i }
 seqOfStrings
-
-// Now you try #1
-for i in 1 .. 5 .. 1000 do printfn "%d" i
-
-let randoms =
-    let r = Random()
-    [ for i in 1 .. 10 -> r.Next(1, 100) ]
-
-let readTenLinesWhile =
-    use reader = new StreamReader(File.OpenRead @"lesson-16.fsx")
-    let mutable lineNumber = 1
-    while (not reader.EndOfStream && lineNumber <= 10) do
-        printfn "%d: %s" lineNumber (reader.ReadLine())
-        lineNumber <- (lineNumber + 1)
-
-let readTenLinesSeq =
-    use reader = new StreamReader(File.OpenRead @"lesson-16.fsx")
-    let lines =
-        seq {
-            while not reader.EndOfStream do
-                yield reader.ReadLine() }
-    lines
-    |> Seq.truncate 10
-    |> Seq.iteri(fun lineNumber line -> printfn "%d: %s" (lineNumber + 1) line)
     
 // Listing 20.4
 let getLimit (score, years) =
