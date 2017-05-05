@@ -49,10 +49,10 @@ let main _ =
     let openingAccount =
         Console.Write "Please enter your name: "
         let owner = Console.ReadLine()
-        
-        owner 
-        |> tryLoadAccountFromDisk        
-        |> defaultArg <|
+                
+        match tryLoadAccountFromDisk owner with
+        | Some account -> account
+        | None ->
             InCredit(CreditAccount { AccountId = Guid.NewGuid()
                                      Balance = 0M
                                      Owner = { Name = owner } })
