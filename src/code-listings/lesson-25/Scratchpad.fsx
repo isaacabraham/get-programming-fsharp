@@ -8,7 +8,11 @@ let simon = Person "Simon"
 simon.PrintName()
 
 // Listing 25.4
-let people =
+let longhand =
+    [ "Tony"; "Fred"; "Samantha"; "Brad"; "Sophie "]
+    |> List.map(fun name -> Person(name))
+
+let shorthand =
     [ "Tony"; "Fred"; "Samantha"; "Brad"; "Sophie "]
     |> List.map Person
 
@@ -17,13 +21,12 @@ open System.Collections.Generic
 
 type PersonComparer() =
    interface IComparer<Person> with
-       member this.Compare(first, second) =
-           first.Name.CompareTo(second.Name)
+       member this.Compare(x, y) = x.Name.CompareTo(y.Name)
 
 let pComparer = PersonComparer() :> IComparer<Person>
 pComparer.Compare(simon, Person "Fred")
 
-// Object expressions
+// Listing 25.6
 let personComparer =
     { new IComparer<Person> with
           member __.Compare(x, y) = x.Name.CompareTo(y.Name) }
