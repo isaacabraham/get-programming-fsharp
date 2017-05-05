@@ -1,3 +1,7 @@
+(* Ignore the "do" keywords here, and the last line in the do blocks that are simply ().
+These are just to allow us to reuse the same symbol names e.g. inventory in multiples places
+in a script. *)
+
 // Listing 17.1-2
 open System.Collections.Generic
 
