@@ -12,7 +12,7 @@ let depositWithAudit amount (ratedAccount:RatedAccount) =
     auditAs "deposit" Auditing.composedLogger deposit amount ratedAccount accountId owner
 let tryLoadAccountFromDisk = FileRepository.tryFindTransactionsOnDisk >> Option.map Operations.loadAccount
 
-type Command = | AccountCmd of BankOperation | Exit
+type Command = AccountCmd of BankOperation | Exit
 
 [<AutoOpen>]
 module CommandParsing =
