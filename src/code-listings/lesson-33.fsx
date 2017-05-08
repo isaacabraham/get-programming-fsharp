@@ -6,27 +6,42 @@ open FSharp.Data
 type Package = HtmlProvider< @"..\..\data\sample-package.html">
 
 // Listing 33.1
-//let getDownloadsForPackage packageName =
-//    let package = Package.Load(sprintf "https://www.nuget.org/packages/%s" packageName)
-//    package.Tables.``Version History``.Rows |> Seq.sumBy(fun p -> p.Downloads)
+let getDownloadsForPackage packageName =
+    let package = Package.Load(sprintf "https://www.nuget.org/packages/%s" packageName)
+    package.Tables.``Version History``.Rows
+    |> Seq.sumBy(fun p -> p.Downloads)
 
 // Listing 33.2
-//let getPackage packageName = packageName |> sprintf "https://www.nuget.org/packages/%s" |> Package.Load
-//let getDetailsForCurrentVersion packageName =
-//    let package = getPackage packageName
-//    package.Tables.``Version History``.Rows |> Seq.tryFind(fun p -> p.Version.Contains "(this version)")
+let getPackage packageName =
+    packageName |> sprintf "https://www.nuget.org/packages/%s" |> Package.Load
+let getDetailsForVersion versionText packageName =
+    let package = getPackage packageName
+    package.Tables.``Version History``.Rows |> Seq.tryFind(fun p -> p.Version.Contains versionText)
+
 
 // Listing 33.3
-let getPackage = sprintf "https://www.nuget.org/packages/%s" >> Package.Load
-let getVersionsForPackage (package:Package) = package.Tables.``Version History``.Rows
-//let loadPackageVersions = getPackage >> getVersionsForPackage
-//
-//let getDownloadsForPackage = loadPackageVersions >> Seq.sumBy(fun p -> p.Downloads)
-//let getDetailsForVersion versionText = loadPackageVersions >> Seq.tryFind(fun p -> p.Version.Contains versionText)
-//let getDetailsForCurrentVersion = getDetailsForVersion "(this version)"
+(* You should comment out / delete the lines above before uncommenting these ones - otherwise, as the names
+of the declared symbols clash, you'll get errors in the IDE. *)
+
+// let getPackage =
+//     sprintf "https://www.nuget.org/packages/%s" >> Package.Load
+// let getVersionsForPackage (package:Package) =
+//     package.Tables.``Version History``.Rows
+// let loadPackageVersions = getPackage >> getVersionsForPackage
+
+// let getDownloadsForPackage =
+//     loadPackageVersions >> Seq.sumBy(fun p -> p.Downloads)
+
+// let getDetailsForVersion versionText =
+//     loadPackageVersions >> Seq.tryFind(fun p -> p.Version.Contains versionText)
+
+// Now you try step 10
+// let getDetailsForCurrentVersion = getDetailsForVersion "(this version)"
 
 // Listing 33.4
+
 open System
+
 type PackageVersion =
     | CurrentVersion
     | Prerelease
@@ -71,9 +86,14 @@ let enrich (versionHistory:Package.VersionHistory.Row seq) =
               PackageVersion = packageVersion })
         |> Seq.toList }
 
-let loadPackageVersions = getPackage >> getVersionsForPackage >> enrich >> (fun p -> p.Versions)
-let getDownloadsForPackage = loadPackageVersions >> Seq.sumBy(fun p -> p.Downloads)
-let getDetailsForVersion version = loadPackageVersions >> Seq.find(fun p -> p.Version = version)
-let getDetailsForCurrentVersion = loadPackageVersions >> Seq.find(fun p -> p.PackageVersion = CurrentVersion)
+// Listing 33.6
+(* You should comment out / delete the clashing function definitions from Listing 33.3 in order to remove
+any errors in the IDE *)
 
-getDetailsForVersion (Version.Parse "9.0.1") "Newtonsoft.Json"
+// let loadPackageVersions = getPackage >> getVersionsForPackage >> enrich >> (fun p -> p.Versions)
+// let getDetailsForVersion version = loadPackageVersions >> Seq.find(fun p -> p.Version = version)
+// let getDetailsForCurrentVersion = loadPackageVersions >> Seq.find(fun p -> p.PackageVersion = CurrentVersion)
+
+// "Newtonsoft.Json" |> getDetailsForVersion (Version.Parse "9.0.1")
+
+// let getDownloadsForPackage = loadPackageVersions >> Seq.sumBy(fun p -> p.Downloads)
