@@ -23,28 +23,3 @@ productCategory.Update()
 type Categories = SqlEnumProvider<"SELECT Name, ProductCategoryId FROM SalesLT.ProductCategory", Conn>
 let woolyHats = Categories.``Wooly Hats``
 printfn "Wooly Hats has ID %d" woolyHats
-
-
-
-
-
-
-
-
-
-
-
-
-let processData (conn:string) =
-    let getCustomers = new SqlCommandProvider<"SELECT TOP 10 * FROM SalesLT.Customer", Conn>(conn)
-    let customers = getCustomers.Execute() |> Seq.toArray
-    customers.[0]
-
-processData Conn
-
-type AdventureWorks = SqlProgrammabilityProvider<Conn>
-let conn = new System.Data.SqlClient.SqlConnection(Conn)
-conn.Open()
-let Q = AdventureWorks.CreateCommand<"SELECT * FROM SalesLT.Customer">(conn).Execute() |> Seq.toArray
-
-let z = AdventureWorks.CreateCommand<"SELECT * FROM SalesLT.Customer">
