@@ -28,13 +28,16 @@ module private OrderProcessing =
     // Listing 28.3
     let toOrder (orderRequest:OrderRequest) =
         { OrderId = OrderId orderRequest.OrderId
-          CustomerName = match orderRequest.CustomerName with | null -> failwith "Customer name must be populated" | name -> name
+          CustomerName =
+            match orderRequest.CustomerName with
+            | null -> failwith "Customer name must be populated"
+            | name -> name
           Comment = orderRequest.Comment |> Option.ofObj
           ContactPreference =
             match Option.ofObj orderRequest.EmailUpdates, Option.ofObj orderRequest.TelephoneUpdates  with
             | None, None -> None
-            | Some emailAddress, None -> Some(EmailUpdates emailAddress)
-            | None, Some telephoneNumber -> Some(TelephoneUpdates telephoneNumber)
+            | Some email, None -> Some(EmailUpdates email)
+            | None, Some phone -> Some(TelephoneUpdates phone)
             | Some _, Some _ -> failwith "Unable to proceed - only one of telephone and email should be supplied"
           Items =
             orderRequest.Items

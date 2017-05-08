@@ -4,8 +4,8 @@ open FSharp.Data
 
 // Listing 32.1
 let [<Literal>] Conn = @"Server=(localdb)\MSSQLLocalDb;Database=AdventureWorksLT;Integrated Security=SSPI"
-type GetCustomers = SqlCommandProvider<"SELECT * FROM SalesLT.Customer WHERE CompanyName = @CompanyName", Conn>
-let customers = GetCustomers.Create(Conn).Execute("A Bike Store") |> Seq.toArray
+type GetCustomers = SqlCommandProvider<"SELECT * FROM SalesLT.Customer", Conn>
+let customers = GetCustomers.Create(Conn).Execute() |> Seq.toArray
 let customer = customers.[0]
 
 // Now you try #1
