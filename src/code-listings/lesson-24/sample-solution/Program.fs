@@ -12,7 +12,7 @@ let depositWithAudit amount (ratedAccount:RatedAccount) =
     auditAs "deposit" Auditing.composedLogger deposit amount ratedAccount accountId owner
 let tryLoadAccountFromDisk = FileRepository.tryFindTransactionsOnDisk >> Option.map Operations.loadAccount
 
-type Command = | AccountCmd of BankOperation | Exit
+type Command = AccountCmd of BankOperation | Exit
 
 [<AutoOpen>]
 module CommandParsing =
@@ -49,10 +49,10 @@ let main _ =
     let openingAccount =
         Console.Write "Please enter your name: "
         let owner = Console.ReadLine()
-        
-        owner 
-        |> tryLoadAccountFromDisk        
-        |> defaultArg <|
+                
+        match tryLoadAccountFromDisk owner with
+        | Some account -> account
+        | None ->
             InCredit(CreditAccount { AccountId = Guid.NewGuid()
                                      Balance = 0M
                                      Owner = { Name = owner } })

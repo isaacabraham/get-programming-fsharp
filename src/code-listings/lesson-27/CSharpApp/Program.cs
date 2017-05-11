@@ -15,8 +15,8 @@ namespace CSharpApp
             Functions.Describe(bike);
             Functions.Describe(motorcar);
 
-            var fourWheeledNormal = Functions.CreateCar(4, "Supacars", 1.5, 3.5);
-            var fourWheeledFSharpFunc =
+            var someWheeledCar = Functions.CreateCar(4, "Supacars", 1.5, 3.5);
+            var fourWheeledCar =
                 Functions.CreateFourWheeledCar
                          .Invoke("Supacars")
                          .Invoke(1.5)
