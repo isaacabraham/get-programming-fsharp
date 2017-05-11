@@ -37,11 +37,8 @@ let asyncLength =
 
 asyncLength |> Async.RunSynchronously
 
-// Listing 36.4
-let getTextAsync = async { return "HELLO" }
-Async.StartWithContinuations(getTextAsync, (fun text -> printfn "%s WORLD" text), ignore, ignore)
-
 // Listing 36.5
+let getTextAsync = async { return "HELLO" }
 let printHelloWorld =
     async {
         let! text = getTextAsync
