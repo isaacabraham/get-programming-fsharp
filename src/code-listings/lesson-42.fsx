@@ -13,15 +13,16 @@ click ".cart-button"
 click ".btn-primary"
 
 "#email" << "Fred.Smith@fakemail.com"
-last ".btn-primary" |> click
+elements ".btn-primary" |> Seq.find(fun e -> e.Text = "checkout as a guest") |> click
 
+"#country" << "United States"
 "#firstName" << "Fred"
 "#lastName" << "Smith"
 "#company" << "Super F# Developers Ltd."
 "#address1" << "23 The Street"
 "#address2" << "The Town"
 "#city" << "The City"
-"#freeformState" << "ABC"
+"#USStateSelector" << "CA"
 "#zip" << "90210"
 "#addressPhone" << "0800 123 456"
 
