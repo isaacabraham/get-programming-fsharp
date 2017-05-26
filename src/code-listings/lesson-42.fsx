@@ -6,7 +6,7 @@ chromeDir <- "drivers"
 
 // Now you try #1
 start chrome
-url "https://www.manning.com/books/learn-fsharp"
+url "https://www.manning.com/books/get-programming-with-f-sharp"
 
 first "#Submit" |> click
 click ".cart-button"
@@ -30,7 +30,7 @@ quit()
 
 // Listing 42.1
 once (fun _ -> start chrome)
-before (fun _ -> url "https://www.manning.com/books/learn-fsharp")
+before (fun _ -> url "https://www.manning.com/books/get-programming-with-f-sharp")
 lastly (fun _ -> quit())
 
 // Listing 42.2
