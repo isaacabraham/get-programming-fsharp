@@ -37,7 +37,7 @@ let asyncLength =
 
 asyncLength |> Async.RunSynchronously
 
-// Listing 36.5
+// Listing 36.4
 let getTextAsync = async { return "HELLO" }
 let printHelloWorld =
     async {
@@ -46,7 +46,7 @@ let printHelloWorld =
 
 printHelloWorld |> Async.Start
 
-// Listing 36.6
+// Listing 36.5
 let random = System.Random()
 let pickANumberAsync =
     async { return random.Next(10) }
@@ -59,7 +59,7 @@ let createFiftyNumbers =
     
 createFiftyNumbers |> Async.Start
 
-// Listing 36.7
+// Listing 36.6
 let urls = [| "http://www.fsharp.org"; "http://microsoft.com"; "http://fsharpforfunandprofit.com" |]
 let downloadData url = async {
     use wc = new System.Net.WebClient()
@@ -75,7 +75,7 @@ let downloadedBytes =
     
 printfn "You downloaded %d characters" (Array.sum downloadedBytes)
 
-// Listing 36.8
+// Listing 36.7
 let downloadData url = async {
     use wc = new System.Net.WebClient()
     printfn "Downloading data on thread %d" System.Threading.Thread.CurrentThread.ManagedThreadId
@@ -90,7 +90,7 @@ let downloadedBytes =
     
 printfn "You downloaded %d characters" (Array.sum downloadedBytes.Result)
 
-// Listing 36.9
+// Bonus - custom computation expression!
 type Maybe() =
     member __.Bind(opt, func) = opt |> Option.bind func
     member __.Return v = Some v
