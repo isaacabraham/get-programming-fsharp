@@ -53,6 +53,6 @@ let randomAgeCustomer = updateAge customer
 // Listing 10.9
 do
     let myHome = { Street = "The Street"; Town = "The Town"; City = "The City" }
-    let myHome = { address with City = "The Other City" }
-    let myHome = { address with City = "The Third City" }
+    let myHome = { myHome with City = "The Other City" }
+    let myHome = { myHome with City = "The Third City" }
     ()
