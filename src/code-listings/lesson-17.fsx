@@ -48,7 +48,7 @@ do
     // Listing 17.5
     let cheapFruit, expensiveFruit =
         inventory
-        |> Map.partition(fun fruit cost -> cost > 0.3)
+        |> Map.partition(fun fruit cost -> cost < 0.3)
 
     ()
 
