@@ -64,15 +64,15 @@ let getCreditLimit customer =
 // Now you try #3
 type Customer = { Balance : int; Name : string }
 
-let handleCustomer customers =
+let handleCustomers customers =
     match customers with
     | [] -> failwith "No customers supplied!"
     | [ customer ] -> printfn "Single customer, name is %s" customer.Name
     | [ first; second ] -> printfn "Two customers, balance = %d" (first.Balance + second.Balance)
     | customers -> printfn "Customers supplied: %d" customers.Length
 
-handleCustomer [] // throws exception
-handleCustomer [ { Balance = 10; Name = "Joe" } ] // prints name
+handleCustomers [] // throws exception
+handleCustomers [ { Balance = 10; Name = "Joe" } ] // prints name
 
 // Listing 20.9
 let getStatus customer =
