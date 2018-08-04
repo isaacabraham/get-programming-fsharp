@@ -1,7 +1,7 @@
 source https://www.nuget.org/api/v2
-framework net452
+storage: none
 
-nuget FSharp.Core
+nuget FSharp.Core 4.3.4
 nuget FSharp.Data
 nuget XPlot.GoogleCharts
 nuget FSharp.Data.SqlClient
