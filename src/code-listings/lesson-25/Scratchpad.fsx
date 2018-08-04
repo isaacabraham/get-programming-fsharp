@@ -1,5 +1,5 @@
 ﻿// Listing 25.3
-#I @"CSharpProject\bin\debug"
+#I @"CSharpProject\bin\debug\netcoreapp2.1"
 #r @"CSharpProject.dll"
 // Or all in one line: #r @"CSharpProject\bin\debug\CSharpProject.dll"
 
