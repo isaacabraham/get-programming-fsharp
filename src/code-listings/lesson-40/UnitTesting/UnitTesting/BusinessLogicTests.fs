@@ -1,7 +1,6 @@
 ﻿module ``Business Logic Tests``
 
 open BusinessLogic
-
 open Xunit
 
 let department =
