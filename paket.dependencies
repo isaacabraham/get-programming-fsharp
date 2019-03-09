@@ -1,6 +1,7 @@
 source https://www.nuget.org/api/v2
 storage: none
-
+framework: netstandard2.0, netcore2.1
+generate_load_scripts: true
 nuget FSharp.Core 4.3.4
 nuget FSharp.Data
 nuget XPlot.GoogleCharts
