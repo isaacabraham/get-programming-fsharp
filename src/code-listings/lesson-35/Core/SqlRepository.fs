@@ -1,4 +1,4 @@
-﻿module internal Capstone6.SqlRepository
+module internal Capstone6.SqlRepository
 
 open Capstone6.Domain
 open FSharp.Data
@@ -6,7 +6,7 @@ open System
 
 [<AutoOpen>]
 module private DB =
-    let [<Literal>] Conn = "Name=AccountsDb"
+    let [<Literal>] Conn = @"Data Source=(localdb)\MSSQLLocalDB;Database=BankAccountDb;Integrated Security=True;Connect Timeout=60"
     type AccountsDb = SqlProgrammabilityProvider<Conn>
     type GetAccountId = SqlCommandProvider<"SELECT TOP 1 AccountId FROM dbo.Account WHERE Owner = @owner", Conn, SingleRow = true>
     type FindTransactions = SqlCommandProvider<"SELECT Timestamp, OperationId, Amount FROM dbo.AccountTransaction WHERE AccountId = @accountId", Conn>
