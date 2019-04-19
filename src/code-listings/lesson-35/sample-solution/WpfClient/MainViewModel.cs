@@ -2,11 +2,9 @@
 using System.Collections.ObjectModel;
 using System.Configuration;
 using Capstone6.Domain;
-using PropertyChanged;
 
 namespace Capstone6
 {
-    [ImplementPropertyChanged]
     public class MainViewModel
     {
         public Customer Owner { get; private set; }
