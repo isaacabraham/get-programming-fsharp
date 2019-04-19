@@ -1,10 +1,8 @@
-﻿using Capstone6.Domain;
-using PropertyChanged;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Configuration;
-using System.Windows.Data;
-using System.Globalization;
+using Capstone6.Domain;
+using PropertyChanged;
 
 namespace Capstone6
 {
@@ -17,12 +15,11 @@ namespace Capstone6
         public int Balance { get; private set; }
         public ObservableCollection<Transaction> Transactions { get; private set; }
         private RatedAccount account;
-        private Api.IBankApi bankApi = Api.CreateSqlApi(ConfigurationManager.ConnectionStrings["AccountsDb"]?.ConnectionString ?? String.Empty);
+        private readonly Api.IBankApi bankApi = Api.CreateSqlApi(ConfigurationManager.ConnectionStrings["AccountsDb"]?.ConnectionString ?? String.Empty);
 
         private Tuple<bool, int> TryParseInt(object value)
         {
-            int output = 0;
-            var parsed = Int32.TryParse(value as string, out output);
+            var parsed = Int32.TryParse(value as string, out int output);
             return Tuple.Create(parsed, output);
         }
 
