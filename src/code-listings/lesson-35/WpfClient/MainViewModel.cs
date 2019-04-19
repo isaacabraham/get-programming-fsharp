@@ -1,23 +1,28 @@
-﻿using Capstone6.Domain;
-using PropertyChanged;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
+using Capstone6.Domain;
 
 namespace Capstone6
 {
-    [ImplementPropertyChanged]
-    public class MainViewModel
+    public class MainViewModel : ViewModelBase
     {
         public Customer Owner { get; private set; }
         public Command<int> DepositCommand { get; private set; }
         public Command<int> WithdrawCommand { get; private set; }
-        public int Balance { get; private set; }
+        private int balance;
+
+        public int Balance
+        {
+            get => balance;
+            private set => SetProperty(ref balance, value);
+        }
+
         public ObservableCollection<Transaction> Transactions { get; private set; }
         private RatedAccount account;
+
         private Tuple<bool, int> TryParseInt(object value)
         {
-            int output = 0;
-            var parsed = Int32.TryParse(value as string, out output);
+            var parsed = Int32.TryParse(value as string, out int output);
             return Tuple.Create(parsed, output);
         }
 
