@@ -14,4 +14,4 @@ let composedLogger =
           printTransaction ]
     fun accountId owner transaction ->
         loggers
-        |> List.iter(fun logger -> logger accountId owner transaction)
+        |> List.iter(fun logger -> logger owner accountId transaction) // logger func signature shall be consistent: owner accountId transaction
