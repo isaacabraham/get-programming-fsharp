@@ -31,6 +31,7 @@ let loadAccount (owner, accountId, transactions) =
     let openingAccount = { AccountId = accountId; Balance = 0M; Owner = { Name = owner } }
 
     transactions
+    |> Seq.filter(fun txn -> txn.Accepted = true) // filter out not accepted transactions
     |> Seq.sortBy(fun txn -> txn.Timestamp)
     |> Seq.fold(fun account txn ->
         if txn.Operation = "withdraw" then account |> withdraw txn.Amount
